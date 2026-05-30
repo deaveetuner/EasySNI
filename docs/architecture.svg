@@ -1,0 +1,84 @@
+<svg width="1180" height="430" viewBox="0 0 1180 430" xmlns="http://www.w3.org/2000/svg" font-family="'Segoe UI',system-ui,-apple-system,Roboto,Helvetica,Arial,sans-serif">
+  <defs>
+    <linearGradient id="abg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#0d1117"/><stop offset="1" stop-color="#11161f"/>
+    </linearGradient>
+    <marker id="arr" markerWidth="9" markerHeight="9" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 Z" fill="#5b6776"/>
+    </marker>
+    <marker id="arrT" markerWidth="9" markerHeight="9" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 Z" fill="#2dd4bf"/>
+    </marker>
+  </defs>
+  <rect width="1180" height="430" rx="18" fill="url(#abg)"/>
+  <rect x="1" y="1" width="1178" height="428" rx="17" fill="none" stroke="#2b323d" stroke-width="2"/>
+
+  <!-- ===== Flow 1: SNI Tunnel ===== -->
+  <text x="40" y="58" font-size="17" font-weight="700" fill="#2dd4bf" font-family="'JetBrains Mono',monospace">SNI TUNNEL</text>
+  <text x="40" y="80" font-size="13" fill="#8c98a8">Real connection, but the SNI shown to the filter is a permitted domain.</text>
+
+  <g font-size="14" font-weight="600">
+    <!-- node helper boxes -->
+    <rect x="40"  y="100" width="150" height="58" rx="11" fill="#161b22" stroke="#2b323d"/>
+    <text x="115" y="125" fill="#f2f5f9" text-anchor="middle">Your apps</text>
+    <text x="115" y="144" fill="#8c98a8" text-anchor="middle" font-size="11.5" font-weight="500">browser / system</text>
+
+    <rect x="250" y="100" width="170" height="58" rx="11" fill="#161b22" stroke="#2dd4bf" stroke-opacity="0.55"/>
+    <text x="335" y="125" fill="#2dd4bf" text-anchor="middle">V2RayEz proxy</text>
+    <text x="335" y="144" fill="#8c98a8" text-anchor="middle" font-size="11.5" font-weight="500">SNI spoof + desync</text>
+
+    <rect x="480" y="100" width="200" height="58" rx="11" fill="#1a212c" stroke="#fbbf24" stroke-opacity="0.5"/>
+    <text x="580" y="125" fill="#fbbf24" text-anchor="middle">DPI filter</text>
+    <text x="580" y="144" fill="#8c98a8" text-anchor="middle" font-size="11.5" font-weight="500">sees "www.google.com"</text>
+
+    <rect x="740" y="100" width="170" height="58" rx="11" fill="#161b22" stroke="#2b323d"/>
+    <text x="825" y="125" fill="#f2f5f9" text-anchor="middle">Real server</text>
+    <text x="825" y="144" fill="#8c98a8" text-anchor="middle" font-size="11.5" font-weight="500">actual endpoint</text>
+  </g>
+  <g stroke="#5b6776" stroke-width="2" fill="none">
+    <line x1="190" y1="129" x2="246" y2="129" marker-end="url(#arr)"/>
+    <line x1="420" y1="129" x2="476" y2="129" marker-end="url(#arr)"/>
+    <line x1="680" y1="129" x2="736" y2="129" marker-end="url(#arr)"/>
+  </g>
+
+  <line x1="40" y1="205" x2="1140" y2="205" stroke="#2b323d" stroke-width="1.5"/>
+
+  <!-- ===== Flow 2: Google Tunnel ===== -->
+  <text x="40" y="248" font-size="17" font-weight="700" fill="#60a5fa" font-family="'JetBrains Mono',monospace">GOOGLE TUNNEL (FASTLY)</text>
+  <text x="40" y="270" font-size="13" fill="#8c98a8">Domain-fronted relay through a Google Apps Script and a Cloudflare Worker you deploy.</text>
+
+  <g font-size="13.5" font-weight="600">
+    <rect x="40"  y="296" width="128" height="62" rx="11" fill="#161b22" stroke="#2b323d"/>
+    <text x="104" y="321" fill="#f2f5f9" text-anchor="middle">Browser</text>
+    <text x="104" y="340" fill="#8c98a8" text-anchor="middle" font-size="11" font-weight="500">→ local proxy</text>
+
+    <rect x="208" y="296" width="158" height="62" rx="11" fill="#161b22" stroke="#2dd4bf" stroke-opacity="0.55"/>
+    <text x="287" y="321" fill="#2dd4bf" text-anchor="middle">V2RayEz</text>
+    <text x="287" y="340" fill="#8c98a8" text-anchor="middle" font-size="11" font-weight="500">TLS · www.google.com</text>
+
+    <rect x="406" y="296" width="150" height="62" rx="11" fill="#1a212c" stroke="#2b323d"/>
+    <text x="481" y="321" fill="#f2f5f9" text-anchor="middle">Google edge</text>
+    <text x="481" y="340" fill="#8c98a8" text-anchor="middle" font-size="11" font-weight="500">front domain</text>
+
+    <rect x="596" y="296" width="160" height="62" rx="11" fill="#161b22" stroke="#2b323d"/>
+    <text x="676" y="321" fill="#f2f5f9" text-anchor="middle">Apps Script</text>
+    <text x="676" y="340" fill="#8c98a8" text-anchor="middle" font-size="11" font-weight="500">your relay</text>
+
+    <rect x="796" y="296" width="160" height="62" rx="11" fill="#161b22" stroke="#2b323d"/>
+    <text x="876" y="321" fill="#f2f5f9" text-anchor="middle">CF Worker</text>
+    <text x="876" y="340" fill="#8c98a8" text-anchor="middle" font-size="11" font-weight="500">your worker</text>
+
+    <rect x="996" y="296" width="144" height="62" rx="11" fill="#161b22" stroke="#34d399" stroke-opacity="0.5"/>
+    <text x="1068" y="321" fill="#34d399" text-anchor="middle">Target</text>
+    <text x="1068" y="340" fill="#8c98a8" text-anchor="middle" font-size="11" font-weight="500">real site</text>
+  </g>
+  <g stroke="#2dd4bf" stroke-width="2" fill="none" opacity="0.85">
+    <line x1="168" y1="327" x2="204" y2="327" marker-end="url(#arrT)"/>
+    <line x1="366" y1="327" x2="402" y2="327" marker-end="url(#arrT)"/>
+    <line x1="556" y1="327" x2="592" y2="327" marker-end="url(#arrT)"/>
+    <line x1="756" y1="327" x2="792" y2="327" marker-end="url(#arrT)"/>
+    <line x1="956" y1="327" x2="992" y2="327" marker-end="url(#arrT)"/>
+  </g>
+
+  <text x="590" y="400" font-size="12.5" fill="#5b6776" text-anchor="middle" font-family="'JetBrains Mono',monospace">the network only ever sees ordinary Google traffic</text>
+</svg>

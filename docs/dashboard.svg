@@ -1,0 +1,106 @@
+<svg width="1180" height="700" viewBox="0 0 1180 700" xmlns="http://www.w3.org/2000/svg" font-family="'Segoe UI',system-ui,-apple-system,Roboto,Helvetica,Arial,sans-serif">
+  <defs>
+    <linearGradient id="mk" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#2dd4bf"/><stop offset="1" stop-color="#14b8a6"/>
+    </linearGradient>
+  </defs>
+  <!-- window -->
+  <rect width="1180" height="700" rx="16" fill="#0d1117" stroke="#2b323d" stroke-width="2"/>
+
+  <!-- header -->
+  <rect x="2" y="2" width="1176" height="58" rx="14" fill="#161b22"/>
+  <rect x="2" y="44" width="1176" height="16" fill="#161b22"/>
+  <rect x="26" y="16" width="30" height="30" rx="9" fill="url(#mk)"/>
+  <text x="41" y="37" font-size="15" font-weight="800" fill="#06231e" text-anchor="middle">V2</text>
+  <text x="68" y="38" font-size="18" font-weight="800" fill="#f2f5f9">V2Ray<tspan fill="#2dd4bf">Ez</tspan></text>
+  <text x="158" y="37" font-size="11" fill="#7d8798">by MacanDev</text>
+  <!-- header right -->
+  <g font-size="11" font-family="'JetBrains Mono',monospace">
+    <circle cx="690" cy="31" r="4" fill="#34d399"/><text x="702" y="35" fill="#8c98a8">Proxy <tspan fill="#d8dee8">on</tspan></text>
+    <rect x="772" y="18" width="150" height="26" rx="13" fill="#161b22" stroke="#2dd4bf" stroke-opacity="0.5"/>
+    <text x="788" y="35" fill="#2dd4bf">xray · 40808</text>
+    <rect x="930" y="18" width="44" height="26" rx="8" fill="#1c2330" stroke="#2b323d"/><text x="952" y="35" fill="#8c98a8" text-anchor="middle">TUN</text>
+    <rect x="982" y="18" width="36" height="26" rx="8" fill="#1c2330" stroke="#2b323d"/><text x="1000" y="36" fill="#cdd5e0" text-anchor="middle" font-size="13">☾</text>
+    <rect x="1026" y="18" width="58" height="26" rx="8" fill="#1c2330" stroke="#2b323d"/><text x="1055" y="35" fill="#cdd5e0" text-anchor="middle">فارسی</text>
+  </g>
+
+  <!-- sidebar -->
+  <rect x="2" y="60" width="232" height="560" fill="#161b22"/>
+  <line x1="234" y1="60" x2="234" y2="620" stroke="#2b323d"/>
+  <g font-family="'Segoe UI',system-ui" >
+    <text x="26" y="92" font-size="10" font-weight="700" fill="#5b6776" letter-spacing="1.5">LIBRARY</text>
+    <!-- active item -->
+    <rect x="16" y="100" width="206" height="38" rx="9" fill="#15302c"/>
+    <rect x="16" y="106" width="3" height="26" rx="2" fill="#2dd4bf"/>
+    <text x="34" y="124" font-size="13.5" font-weight="600" fill="#f2f5f9">⚏  Configs</text>
+    <text x="34" y="162" font-size="13.5" fill="#8c98a8">⚙  XRay Core</text>
+
+    <text x="26" y="200" font-size="10" font-weight="700" fill="#5b6776" letter-spacing="1.5">TUNNELS</text>
+    <text x="34" y="226" font-size="13.5" fill="#8c98a8">≋  SNI Tunnel</text>
+    <text x="34" y="256" font-size="13.5" fill="#8c98a8">◈  Google Tunnel</text>
+    <text x="34" y="286" font-size="13.5" fill="#8c98a8">⇄  SPlus</text>
+
+    <text x="26" y="324" font-size="10" font-weight="700" fill="#5b6776" letter-spacing="1.5">SCANNERS</text>
+    <text x="34" y="350" font-size="13.5" fill="#8c98a8">◎  SNI Scan</text>
+    <text x="34" y="380" font-size="13.5" fill="#8c98a8">⊞  Clean IP Scanner</text>
+    <text x="34" y="410" font-size="13.5" fill="#8c98a8">⌘  Site Scanner</text>
+    <text x="34" y="440" font-size="13.5" fill="#8c98a8">⚡  CDN Edge Test</text>
+
+    <text x="26" y="478" font-size="10" font-weight="700" fill="#5b6776" letter-spacing="1.5">TOOLS</text>
+    <text x="34" y="504" font-size="13.5" fill="#8c98a8">☁  CF Worker</text>
+    <text x="34" y="534" font-size="13.5" fill="#8c98a8">ⓘ  About</text>
+  </g>
+
+  <!-- main -->
+  <text x="266" y="98" font-size="24" font-weight="700" fill="#f2f5f9">Config Library</text>
+  <text x="266" y="124" font-size="13" fill="#8c98a8">Group, test, edit and connect your configs — everything auto-saves.</text>
+
+  <!-- group tabs -->
+  <g font-size="12" font-family="'JetBrains Mono',monospace">
+    <rect x="266" y="144" width="92" height="30" rx="9" fill="#15302c" stroke="#2dd4bf" stroke-opacity="0.5"/><text x="312" y="164" fill="#2dd4bf" text-anchor="middle">SNI Spoof</text>
+    <rect x="366" y="144" width="72" height="30" rx="9" fill="#1c2330" stroke="#2b323d"/><text x="402" y="164" fill="#8c98a8" text-anchor="middle">Latest</text>
+    <rect x="446" y="144" width="60" height="30" rx="9" fill="#1c2330" stroke="#2b323d"/><text x="476" y="164" fill="#8c98a8" text-anchor="middle">Free</text>
+  </g>
+
+  <!-- card -->
+  <rect x="266" y="190" width="888" height="300" rx="12" fill="#161b22" stroke="#2b323d"/>
+  <text x="290" y="220" font-size="11" font-weight="700" fill="#8c98a8" letter-spacing="1">CONFIGS</text>
+  <rect x="284" y="210" width="5" height="13" rx="2" fill="#2dd4bf"/>
+
+  <!-- config rows -->
+  <g font-family="'JetBrains Mono',monospace" font-size="12.5">
+    <!-- active row -->
+    <rect x="290" y="236" width="840" height="44" rx="9" fill="#13271f" stroke="#34d399" stroke-opacity="0.55"/>
+    <circle cx="312" cy="258" r="5" fill="#34d399"/>
+    <text x="332" y="262" fill="#f2f5f9">Germany-FRA-01  <tspan fill="#2dd4bf">38ms</tspan>  <tspan fill="#60a5fa">⬇42 ⬆11Mb/s</tspan>  <tspan fill="#7d8798" font-size="10">vless</tspan></text>
+    <rect x="1006" y="247" width="54" height="22" rx="7" fill="none" stroke="#34d399" stroke-opacity="0.5"/><text x="1033" y="262" fill="#34d399" text-anchor="middle" font-size="10.5">CONNECT</text>
+    <rect x="1066" y="247" width="26" height="22" rx="6" fill="none" stroke="#2b323d"/><text x="1079" y="262" fill="#8c98a8" text-anchor="middle" font-size="11">✎</text>
+    <rect x="1098" y="247" width="26" height="22" rx="6" fill="none" stroke="#2b323d"/><text x="1111" y="262" fill="#8c98a8" text-anchor="middle" font-size="11">▦</text>
+
+    <!-- normal rows -->
+    <rect x="290" y="288" width="840" height="44" rx="9" fill="#1a212c" stroke="#2b323d"/>
+    <circle cx="312" cy="310" r="5" fill="#2b323d"/>
+    <text x="332" y="314" fill="#cdd5e0">Netherlands-AMS-02  <tspan fill="#2dd4bf">61ms</tspan>  <tspan fill="#7d8798" font-size="10">trojan</tspan></text>
+    <rect x="1006" y="299" width="54" height="22" rx="7" fill="none" stroke="#2b323d"/><text x="1033" y="314" fill="#8c98a8" text-anchor="middle" font-size="10.5">connect</text>
+
+    <rect x="290" y="340" width="840" height="44" rx="9" fill="#15233a" stroke="#60a5fa" stroke-opacity="0.5"/>
+    <circle cx="312" cy="362" r="5" fill="#2b323d"/>
+    <text x="332" y="366" fill="#cdd5e0">France-PAR-07  <tspan fill="#2dd4bf">52ms</tspan>  <tspan fill="#7d8798" font-size="10">vmess</tspan>  <tspan fill="#60a5fa" font-size="10">selected</tspan></text>
+
+    <rect x="290" y="392" width="840" height="44" rx="9" fill="#1a212c" stroke="#2b323d"/>
+    <circle cx="312" cy="414" r="5" fill="#2b323d"/>
+    <text x="332" y="418" fill="#cdd5e0">UK-LON-03  <tspan fill="#2dd4bf">74ms</tspan>  <tspan fill="#7d8798" font-size="10">ss</tspan></text>
+  </g>
+  <!-- scrollbar hint -->
+  <rect x="1138" y="236" width="6" height="120" rx="3" fill="#2b323d"/>
+
+  <!-- console -->
+  <rect x="2" y="620" width="1176" height="78" rx="14" fill="#0a0e14"/>
+  <rect x="2" y="620" width="1176" height="16" fill="#0a0e14"/>
+  <line x1="2" y1="620" x2="1178" y2="620" stroke="#2b323d"/>
+  <text x="26" y="644" font-size="10" font-weight="700" fill="#5b6776" letter-spacing="2">ACTIVITY</text>
+  <g font-family="'JetBrains Mono',monospace" font-size="11.5">
+    <text x="26" y="668" fill="#34d399">[OK]<tspan fill="#cdd5e0">  xray started — SOCKS5 127.0.0.1:40808</tspan></text>
+    <text x="26" y="686" fill="#2dd4bf">[•]<tspan fill="#cdd5e0">   Site scan: 48/48 done · 31 reachable · 12 Cloudflare</tspan></text>
+  </g>
+</svg>

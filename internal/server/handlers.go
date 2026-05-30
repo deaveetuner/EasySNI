@@ -4,6 +4,8 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
+	"fmt"
+	"net/http"
 	"sort"
 	"strconv"
 	"strings"
@@ -17,12 +19,14 @@ import (
 	"github.com/skip2/go-qrcode"
 
 	"ezsni/internal/edgetunnel"
+	"ezsni/internal/gtunnel"
 	"ezsni/internal/netutil"
 	"ezsni/internal/proxy"
 	"ezsni/internal/psiphon"
 	"ezsni/internal/singbox"
 	"ezsni/internal/sni"
 	"ezsni/internal/splus"
+	"ezsni/internal/sysproxy"
 	"ezsni/internal/windivert"
 	"ezsni/internal/xray"
 )
@@ -765,6 +769,76 @@ func (s *Server) handleSavedSNILoad(json.RawMessage) (any, error) {
 	return map[string]any{"found": true, "data": json.RawMessage(data)}, nil
 }
 
+// ---- Google Tunnel (domain-fronted GAS → Worker relay) --------------------
+
+func (s *Server) handleGtunScripts(body json.RawMessage) (any, error) {
+	var req struct {
+		WorkerURL string `json:"worker_url"`
+		AuthKey   string `json:"auth_key"`
+	}
+	_ = json.Unmarshal(body, &req)
+	host := strings.TrimPrefix(strings.TrimPrefix(req.WorkerURL, "https://"), "http://")
+	host = strings.TrimSuffix(host, "/")
+	return map[string]any{
+		"worker_js": gtunnel.GenWorkerJS(host),
+		"code_gs":   gtunnel.GenCodeGS(req.AuthKey, req.WorkerURL),
+	}, nil
+}
+
+func (s *Server) handleGtunStart(body json.RawMessage) (any, error) {
+	var req struct {
+		FrontIP    string `json:"front_ip"`
+		FrontSNI   string `json:"front_sni"`
+		FrontHost  string `json:"front_host"`
+		ScriptID   string `json:"script_id"`
+		AuthKey    string `json:"auth_key"`
+		WorkerURL  string `json:"worker_url"`
+		ListenHost string `json:"listen_host"`
+		ListenPort int    `json:"listen_port"`
+	}
+	if err := json.Unmarshal(body, &req); err != nil {
+		return nil, err
+	}
+	err := s.gtun.Start(gtunnel.Config{
+		FrontIP: req.FrontIP, FrontSNI: req.FrontSNI, FrontHost: req.FrontHost,
+		ScriptID: req.ScriptID, AuthKey: req.AuthKey, WorkerURL: req.WorkerURL,
+		ListenHost: req.ListenHost, ListenPort: req.ListenPort,
+	})
+	if err != nil {
+		s.log("✗ Google Tunnel: "+err.Error(), "ERROR")
+		return nil, err
+	}
+	return s.gtun.Status(), nil
+}
+
+func (s *Server) handleGtunStop(json.RawMessage) (any, error) {
+	s.gtun.Stop()
+	return map[string]any{"running": false}, nil
+}
+
+func (s *Server) handleGtunStatus(json.RawMessage) (any, error) {
+	return s.gtun.Status(), nil
+}
+
+// handleGtunCA serves the local MITM CA certificate for the user to install.
+func (s *Server) handleGtunCA(w http.ResponseWriter, r *http.Request) {
+	pemBytes := s.gtun.CAPEM()
+	if len(pemBytes) == 0 {
+		http.Error(w, "CA not generated yet — start the Google Tunnel once", http.StatusNotFound)
+		return
+	}
+	// .crt installs with a double-click on Windows; .pem is the same content.
+	if r.URL.Query().Get("fmt") == "crt" {
+		w.Header().Set("Content-Type", "application/x-x509-ca-cert")
+		w.Header().Set("Content-Disposition", "attachment; filename=v2rayez-google-tunnel-ca.crt")
+		_, _ = w.Write(pemBytes)
+		return
+	}
+	w.Header().Set("Content-Type", "application/x-pem-file")
+	w.Header().Set("Content-Disposition", "attachment; filename=v2rayez-google-tunnel-ca.pem")
+	_, _ = w.Write(pemBytes)
+}
+
 func (s *Server) handleXrayUpdateConfigs(body json.RawMessage) (any, error) {
 	var req struct {
 		Limit int `json:"limit"`
@@ -924,6 +998,58 @@ func (s *Server) handleXrayStop(json.RawMessage) (any, error) {
 
 func (s *Server) handleXrayStatus(json.RawMessage) (any, error) {
 	return s.xrayRunner.Status(), nil
+}
+
+// ---- system proxy (point the OS at xray's local proxy) --------------------
+
+func (s *Server) handleSysproxySet(body json.RawMessage) (any, error) {
+	var req struct {
+		Mode string `json:"mode"`
+		Host string `json:"host"`
+		Port int    `json:"port"`
+	}
+	_ = json.Unmarshal(body, &req)
+	if !sysproxy.Supported() {
+		return nil, errors.New("system-proxy control isn't supported on this OS — set it manually")
+	}
+	if strings.TrimSpace(req.Host) == "" {
+		req.Host = "127.0.0.1"
+	}
+	if req.Port == 0 {
+		// Fall back to the running xray SOCKS port if present.
+		st := s.xrayRunner.Status()
+		if p, ok := st["socks"].(int); ok && p > 0 {
+			req.Port = p
+		}
+	}
+	if req.Port == 0 {
+		return nil, errors.New("no proxy port — start xray (SOCKS) first or pass a port")
+	}
+	var err error
+	mode := "socks"
+	if req.Mode == "http" {
+		mode = "http"
+		err = sysproxy.SetHTTP(req.Host, req.Port)
+	} else {
+		err = sysproxy.SetSOCKS(req.Host, req.Port)
+	}
+	if err != nil {
+		s.log("✗ system proxy: "+err.Error(), "ERROR")
+		return nil, err
+	}
+	s.log(fmt.Sprintf("System proxy set → %s %s:%d", mode, req.Host, req.Port), "OK")
+	return map[string]any{"ok": true, "mode": mode, "host": req.Host, "port": req.Port}, nil
+}
+
+func (s *Server) handleSysproxyClear(json.RawMessage) (any, error) {
+	if !sysproxy.Supported() {
+		return nil, errors.New("system-proxy control isn't supported on this OS")
+	}
+	if err := sysproxy.Clear(); err != nil {
+		return nil, err
+	}
+	s.log("System proxy cleared", "DIM")
+	return map[string]any{"ok": true}, nil
 }
 
 // ---- sing-box (TUN / system-wide) -----------------------------------------

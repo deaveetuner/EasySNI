@@ -14,6 +14,7 @@ import (
 	"time"
 
 	"ezsni/internal/desync"
+	"ezsni/internal/gtunnel"
 	"ezsni/internal/logbus"
 	"ezsni/internal/proxy"
 	"ezsni/internal/psiphon"
@@ -36,6 +37,7 @@ type Server struct {
 	desyncDefaults desync.Config
 	xrayRunner     *xray.Runner
 	singboxRunner  *singbox.Runner
+	gtun           *gtunnel.Runner
 	psi            *psiphon.Controller
 	cdnMu          sync.Mutex
 	cdn            *xray.CDNScanState
@@ -50,6 +52,8 @@ func New() *Server {
 	s := &Server{bus: logbus.New(), desyncDefaults: desync.DefaultConfig()}
 	s.xrayRunner = xray.NewRunner(s.bus.Log)
 	s.singboxRunner = singbox.NewRunner(s.bus.Log)
+	s.gtun = gtunnel.NewRunner(s.bus.Log)
+	gtunnel.SetStore(readSideFile, writeSideFile)
 	s.psi = psiphon.New()
 	return s
 }
@@ -104,11 +108,18 @@ func (s *Server) Handler() http.Handler {
 	mux.HandleFunc("/api/xray/start", s.jsonPOST(s.handleXrayStart))
 	mux.HandleFunc("/api/xray/stop", s.jsonPOST(s.handleXrayStop))
 	mux.HandleFunc("/api/xray/status", s.jsonPOST(s.handleXrayStatus))
+	mux.HandleFunc("/api/sysproxy/set", s.jsonPOST(s.handleSysproxySet))
+	mux.HandleFunc("/api/sysproxy/clear", s.jsonPOST(s.handleSysproxyClear))
 	mux.HandleFunc("/api/singbox/find", s.jsonPOST(s.handleSingboxFind))
 	mux.HandleFunc("/api/singbox/download", s.jsonPOST(s.handleSingboxDownload))
 	mux.HandleFunc("/api/singbox/start", s.jsonPOST(s.handleSingboxStart))
 	mux.HandleFunc("/api/singbox/stop", s.jsonPOST(s.handleSingboxStop))
 	mux.HandleFunc("/api/singbox/status", s.jsonPOST(s.handleSingboxStatus))
+	mux.HandleFunc("/api/gtun/scripts", s.jsonPOST(s.handleGtunScripts))
+	mux.HandleFunc("/api/gtun/start", s.jsonPOST(s.handleGtunStart))
+	mux.HandleFunc("/api/gtun/stop", s.jsonPOST(s.handleGtunStop))
+	mux.HandleFunc("/api/gtun/status", s.jsonPOST(s.handleGtunStatus))
+	mux.HandleFunc("/api/gtun/ca", s.handleGtunCA)
 	mux.HandleFunc("/api/windivert/status", s.jsonPOST(s.handleWinDivertStatus))
 	mux.HandleFunc("/api/windivert/install", s.jsonPOST(s.handleWinDivertInstall))
 	mux.HandleFunc("/api/windivert/uninstall", s.jsonPOST(s.handleWinDivertUninstall))
