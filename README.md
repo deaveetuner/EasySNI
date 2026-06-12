@@ -35,8 +35,7 @@ page. No installer, no hidden services, no telemetry. It's Go with an embedded U
 whole app is one portable file.
 
 <div align="center">
-<img src="docs/dashboard.svg" alt="V2RayEz dashboard (illustrative preview)" width="92%">
-<br><sub><i>Illustrative preview of the dashboard. Drop real captures into <code>docs/screenshots/</code> to replace it.</i></sub>
+<img src="docs/screenshots/dashboard2.png" alt="V2RayEz dashboard" width="92%">
 </div>
 
 ### ✨ Features
@@ -215,8 +214,7 @@ xray/sing-box، اسکنرها، کتابخانهٔ کانفیگ، رلهٔ فر
 رابط تعبیه‌شده نوشته شده، پس کل برنامه یک فایل قابل‌حمل است.
 
 <div align="center">
-<img src="docs/dashboard.svg" alt="پیش‌نمایش داشبورد V2RayEz" width="92%">
-<br><sub><i>پیش‌نمایش نمادین داشبورد. تصاویر واقعی را در <code>docs/screenshots/</code> بگذارید تا جایگزین شود.</i></sub>
+<img src="docs/screenshots/dashboard2.png" alt=" V2RayEz" width="92%">
 </div>
 
 ### ✨ ویژگی‌ها
