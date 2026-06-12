@@ -162,6 +162,20 @@ func buildConfig(p sni.ParsedURI, outHost string, outPort int, listenHost string
 	tlsSettings := map[string]any{
 		"serverName": p.SNI,
 	}
+	if p.ALPN != "" {
+		var alpns []any
+		for _, a := range strings.Split(p.ALPN, ",") {
+			if a = strings.TrimSpace(a); a != "" {
+				alpns = append(alpns, a)
+			}
+		}
+		if len(alpns) > 0 {
+			tlsSettings["alpn"] = alpns
+		}
+	}
+	if p.Fingerprint != "" {
+		tlsSettings["fingerprint"] = p.Fingerprint
+	}
 	if p.AllowInsecure {
 		// Only emit when explicitly enabled. Newer xray cores have removed the
 		// field, so the default (false) must omit it entirely.
@@ -173,9 +187,15 @@ func buildConfig(p sni.ParsedURI, outHost string, outPort int, listenHost string
 		"tlsSettings": tlsSettings,
 	}
 	if p.Type == "ws" {
+		// The WebSocket Host header is the host= value when present (CDN configs
+		// connect to one address but set a different Host), else the SNI.
+		wsHost := p.WSHost
+		if wsHost == "" {
+			wsHost = p.SNI
+		}
 		stream["wsSettings"] = map[string]any{
 			"path":    p.Path,
-			"headers": map[string]any{"Host": p.SNI},
+			"headers": map[string]any{"Host": wsHost},
 		}
 	}
 

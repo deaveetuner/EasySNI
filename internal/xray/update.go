@@ -39,6 +39,11 @@ func FetchSubscription(subURL string, limit int) ([]string, error) {
 	}
 	body, _ := io.ReadAll(io.LimitReader(resp.Body, 8<<20))
 	resp.Body.Close()
+	// Panels like BPB return a JSON array of full Xray configs when ?app=xray.
+	// Convert those to share links; otherwise treat the body as a link list.
+	if links := jsonConfigsToLinks(string(body), limit); len(links) > 0 {
+		return links, nil
+	}
 	return parseShareLinks(string(body), limit), nil
 }
 

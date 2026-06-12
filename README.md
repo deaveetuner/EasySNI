@@ -5,7 +5,7 @@
 
 <br>
 
-[![Version](https://img.shields.io/badge/version-4.5.1-2dd4bf?style=for-the-badge)](#)
+[![Version](https://img.shields.io/badge/version-4.7.5-2dd4bf?style=for-the-badge)](#)
 [![Go](https://img.shields.io/badge/Go-1.22+-00ADD8?style=for-the-badge&logo=go&logoColor=white)](https://go.dev)
 [![Platform](https://img.shields.io/badge/Windows%20·%20macOS%20·%20Linux-1c2330?style=for-the-badge)](#)
 [![Telegram](https://img.shields.io/badge/@EzAccess1-229ED9?style=for-the-badge&logo=telegram&logoColor=white)](https://t.me/EzAccess1)
@@ -35,7 +35,8 @@ page. No installer, no hidden services, no telemetry. It's Go with an embedded U
 whole app is one portable file.
 
 <div align="center">
-<img src="docs/screenshots/dashboard2.png" alt="V2RayEz dashboard" width="92%">
+<img src="docs/dashboard.svg" alt="V2RayEz dashboard (illustrative preview)" width="92%">
+<br><sub><i>Illustrative preview of the dashboard. Drop real captures into <code>docs/screenshots/</code> to replace it.</i></sub>
 </div>
 
 ### ✨ Features
@@ -76,15 +77,20 @@ GOOS=windows GOARCH=amd64 go build -o v2rayez.exe .
 GOOS=darwin  GOARCH=arm64 go build -o v2rayez-mac .
 GOOS=linux   GOARCH=amd64 go build -o v2rayez .
 
-# optional transports behind build tags
-go build -tags "livekit psiphon" -o v2rayez .
+# optional transports behind build tags — flags go BEFORE the dot:
+go build -tags "psiphon livekit" .        # correct
+# go build . -tags psiphon                 # WRONG: "malformed import path -tags"
+# tagged builds fetch deps first:
+#   go get github.com/Psiphon-Labs/psiphon-tunnel-core/ClientLibrary/clientlib@latest
+#   go get github.com/livekit/server-sdk-go/v2@latest
 ```
 
 **Build every platform at once** (output in `dist/`, Windows `.exe` gets the app icon):
 
 ```bash
-build-all.bat     # on Windows
-./build-all.sh    # on macOS / Linux
+build-all.bat              # Windows - interactive: pick a tag profile (Standard / Psiphon / LiveKit / All), it fetches deps and builds
+./build-all.sh             # macOS / Linux - standard
+./build-all.sh psiphon     # with a build tag (fetches its deps automatically)
 ```
 </details>
 
@@ -176,6 +182,22 @@ Built by **MacanDev** · [@EzAccess1](https://t.me/EzAccess1). The Google Tunnel
 inspired by the MasterHttpRelay / mhr-cfw approach, and the client-side domain-fronting tab
 is V2RayEz's own implementation of the technique documented by **patterniha**.
 
+
+### 💖 Donate
+
+If V2RayEz helps you, a donation keeps development and servers alive. Thank you! 🙏
+
+| Coin | Network | Address |
+|------|---------|---------|
+| **Bitcoin** | BTC | `bc1qa7wtepdm5gqkn90mzv7n80p8uguay62la3aa3t` |
+| **Ethereum** | ERC-20 | `0x449945E00c1Ad50B0705547677Bbf6E34f16698A` |
+| **Solana** | SOL | `Fmis7BhiuHqVDnPeSAQ4VeUfEoY3KafpgbCt4VTGm6MZ` |
+| **BNB** | BEP-20 | `0x449945E00c1Ad50B0705547677Bbf6E34f16698A` |
+| **TRON** | TRX | `TU1svYx5YeeBz1bWCkJWYNx6oGE8WukWJ5` |
+| **USDT** | TRC-20 | `TU1svYx5YeeBz1bWCkJWYNx6oGE8WukWJ5` |
+| **USDT** | BEP-20 | `0x449945E00c1Ad50B0705547677Bbf6E34f16698A` |
+| **USDT** | ERC-20 | `0x449945E00c1Ad50B0705547677Bbf6E34f16698A` |
+
 <div align="right"><a href="#top">↑ back to top</a></div>
 
 ---
@@ -193,7 +215,8 @@ xray/sing-box، اسکنرها، کتابخانهٔ کانفیگ، رلهٔ فر
 رابط تعبیه‌شده نوشته شده، پس کل برنامه یک فایل قابل‌حمل است.
 
 <div align="center">
-<img src="docs/screenshots/dashboard2.png" alt="V2RayEz" width="92%">
+<img src="docs/dashboard.svg" alt="پیش‌نمایش داشبورد V2RayEz" width="92%">
+<br><sub><i>پیش‌نمایش نمادین داشبورد. تصاویر واقعی را در <code>docs/screenshots/</code> بگذارید تا جایگزین شود.</i></sub>
 </div>
 
 ### ✨ ویژگی‌ها
@@ -273,6 +296,22 @@ SNI فرانتِ مجاز به اِج CDN می‌رسد — شبکه فقط تر
 MasterHttpRelay / mhr-cfw الهام گرفته شده، و تب دامین‌فرانتینگ سمت کلاینت پیاده‌سازی مستقل
 V2RayEz از تکنیکی است که **patterniha** مستند کرده است.
 
+
+### 💖 حمایت
+
+اگر V2RayEz برایتان مفید بود، یک کمک مالی به ادامهٔ توسعه و سرورها کمک می‌کند. ممنون! 🙏
+
+| ارز | شبکه | آدرس |
+|------|---------|---------|
+| **Bitcoin** | BTC | `bc1qa7wtepdm5gqkn90mzv7n80p8uguay62la3aa3t` |
+| **Ethereum** | ERC-20 | `0x449945E00c1Ad50B0705547677Bbf6E34f16698A` |
+| **Solana** | SOL | `Fmis7BhiuHqVDnPeSAQ4VeUfEoY3KafpgbCt4VTGm6MZ` |
+| **BNB** | BEP-20 | `0x449945E00c1Ad50B0705547677Bbf6E34f16698A` |
+| **TRON** | TRX | `TU1svYx5YeeBz1bWCkJWYNx6oGE8WukWJ5` |
+| **USDT** | TRC-20 | `TU1svYx5YeeBz1bWCkJWYNx6oGE8WukWJ5` |
+| **USDT** | BEP-20 | `0x449945E00c1Ad50B0705547677Bbf6E34f16698A` |
+| **USDT** | ERC-20 | `0x449945E00c1Ad50B0705547677Bbf6E34f16698A` |
+
 </div>
 
-<div align="center"><sub>© MacanDev · V2RayEz v4.5.1</sub></div>
+<div align="center"><sub>© MacanDev · V2RayEz v4.7.5</sub></div>

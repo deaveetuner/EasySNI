@@ -12,7 +12,7 @@ import (
 )
 
 // AppVersion is the current V2RayEz version.
-const AppVersion = "4.6.5"
+const AppVersion = "4.7.5"
 
 // updateRepo is the official GitHub repository for V2RayEz / EasySNI. Updates
 // are resolved from its GitHub releases via github.com (no api.github.com,

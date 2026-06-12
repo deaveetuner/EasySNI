@@ -4,6 +4,7 @@ import (
 	"archive/zip"
 	"bytes"
 	"context"
+	"encoding/json"
 	"errors"
 	"ezsni/internal/ghdl"
 	"io"
@@ -14,6 +15,7 @@ import (
 	"runtime"
 	"sort"
 	"strconv"
+	"strings"
 	"sync"
 	"time"
 
@@ -276,9 +278,13 @@ func (r *Runner) Status() map[string]any {
 	if p := sni.ParseURI(r.uri); p.Valid {
 		server = net.JoinHostPort(p.Host, strconv.Itoa(p.Port))
 	}
+	socks := ""
+	if r.port > 0 {
+		socks = net.JoinHostPort(r.listen, strconv.Itoa(r.port))
+	}
 	return map[string]any{
 		"running": true,
-		"socks":   net.JoinHostPort(r.listen, strconv.Itoa(r.port)),
+		"socks":   socks,
 		"uri":     r.uri,
 		"server":  server,
 		"bin":     r.bin,
@@ -360,6 +366,93 @@ func (r *Runner) Start(opts RunOptions) error {
 }
 
 // stopLocked kills the running process; callers must hold r.mu.
+// StartRaw launches xray with a full, user-supplied config (e.g. an imported
+// MITM-DomainFronting JSON). The config brings its own inbounds, so we don't
+// build one or assume a SOCKS port — we run it and confirm it stays up.
+func (r *Runner) StartRaw(binPath, rawConfig string) error {
+	r.mu.Lock()
+	defer r.mu.Unlock()
+	if r.cmd != nil {
+		r.log("Switching connection — stopping current xray…", "DIM")
+		r.stopLocked()
+	}
+	bin := ResolveBin(binPath)
+	if bin == "" {
+		return errors.New("xray binary not found — set its path or use Download")
+	}
+	if strings.TrimSpace(rawConfig) == "" {
+		return errors.New("empty config")
+	}
+	var probe map[string]any
+	if err := json.Unmarshal([]byte(rawConfig), &probe); err != nil {
+		return errors.New("not a valid Xray JSON config: " + err.Error())
+	}
+	if _, ok := probe["outbounds"]; !ok {
+		return errors.New("this JSON is not an Xray config (no outbounds)")
+	}
+	f, err := os.CreateTemp("", "v2rayez-raw-*.json")
+	if err != nil {
+		return err
+	}
+	cfgPath := f.Name()
+	_, _ = f.WriteString(rawConfig)
+	_ = f.Close()
+
+	cmd := exec.Command(bin, "-c", cfgPath)
+	var out lockBuf
+	cmd.Stdout, cmd.Stderr = &out, &out
+	hideWindow(cmd)
+	if err := cmd.Start(); err != nil {
+		_ = os.Remove(cfgPath)
+		return errors.New("failed to start xray: " + err.Error())
+	}
+	waitErr := make(chan error, 1)
+	go func() { waitErr <- cmd.Wait() }()
+	// Raw config controls its own ports, so just confirm it doesn't exit early.
+	select {
+	case e := <-waitErr:
+		_ = os.Remove(cfgPath)
+		return errors.New("xray exited before it was ready" + procDetail(e, out.String()))
+	case <-time.After(2500 * time.Millisecond):
+	}
+	r.cmd = cmd
+	r.cfgPath = cfgPath
+	r.bin = bin
+	r.uri = ""
+	r.listen = "127.0.0.1"
+	r.port = firstInboundPort(probe)
+	go func() {
+		<-waitErr
+		r.mu.Lock()
+		if r.cmd == cmd {
+			r.cmd, r.cfgPath = nil, ""
+		}
+		r.mu.Unlock()
+	}()
+	r.log("xray started with imported config.", "OK")
+	return nil
+}
+
+// firstInboundPort returns the port of the first inbound in a parsed config (so
+// the UI can show "SOCKS5: 127.0.0.1:<port>"), or 0.
+func firstInboundPort(cfg map[string]any) int {
+	ins, _ := cfg["inbounds"].([]any)
+	for _, in := range ins {
+		m, ok := in.(map[string]any)
+		if !ok {
+			continue
+		}
+		proto, _ := m["protocol"].(string)
+		if proto == "tunnel" || proto == "dokodemo-door" || proto == "dns" {
+			continue // skip helper inbounds; we want the SOCKS/HTTP/mixed one
+		}
+		if p, ok := m["port"].(float64); ok {
+			return int(p)
+		}
+	}
+	return 0
+}
+
 func (r *Runner) stopLocked() {
 	if r.cmd == nil {
 		return

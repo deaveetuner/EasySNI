@@ -927,7 +927,7 @@ func (s *Server) handleQR(body json.RawMessage) (any, error) {
 	if strings.TrimSpace(req.Text) == "" {
 		return nil, errors.New("text required")
 	}
-	png, err := qrcode.Encode(req.Text, qrcode.Medium, 320)
+	png, err := qrcode.Encode(req.Text, qrcode.Low, 600)
 	if err != nil {
 		return nil, err
 	}
@@ -986,6 +986,21 @@ func (s *Server) handleSubscribe(body json.RawMessage) (any, error) {
 }
 
 // ---- Config manager persistence (groups of saved configs) -----------------
+
+// handleConfigsFromJSON extracts share links from a pasted/dropped full Xray
+// config (a single object or an array — e.g. a BPB "Best Ping" file with many
+// proxy outbounds). Returns the convertible vless/trojan links.
+func (s *Server) handleConfigsFromJSON(body json.RawMessage) (any, error) {
+	var req struct {
+		Text  string `json:"text"`
+		Limit int    `json:"limit"`
+	}
+	if err := json.Unmarshal(body, &req); err != nil {
+		return nil, err
+	}
+	links := xray.JSONConfigsToLinks(req.Text, req.Limit)
+	return map[string]any{"configs": links, "count": len(links)}, nil
+}
 
 func (s *Server) handleConfigsStoreSave(body json.RawMessage) (any, error) {
 	if len(body) == 0 || !json.Valid(body) {
@@ -1079,6 +1094,27 @@ func (s *Server) handleXrayStart(body json.RawMessage) (any, error) {
 		Direct:     req.Direct,
 	})
 	if err != nil {
+		s.log("✗ "+err.Error(), "ERROR")
+		return nil, err
+	}
+	return s.xrayRunner.Status(), nil
+}
+
+// handleXrayStartRaw runs a full, user-supplied Xray config (e.g. an imported
+// MITM-DomainFronting JSON file) directly, instead of building one from a URI.
+func (s *Server) handleXrayStartRaw(body json.RawMessage) (any, error) {
+	var req struct {
+		Config  string `json:"config"`
+		BinPath string `json:"bin_path"`
+	}
+	if err := json.Unmarshal(body, &req); err != nil {
+		return nil, err
+	}
+	if strings.TrimSpace(req.Config) == "" {
+		return nil, errors.New("config required")
+	}
+	s.log("Starting xray with imported config…", "ACCENT")
+	if err := s.xrayRunner.StartRaw(req.BinPath, req.Config); err != nil {
 		s.log("✗ "+err.Error(), "ERROR")
 		return nil, err
 	}
@@ -1510,6 +1546,18 @@ func (s *Server) handleTun2socksDownload(body json.RawMessage) (any, error) {
 	if err != nil {
 		s.log("✗ "+err.Error(), "ERROR")
 		return map[string]any{"ok": false, "error": err.Error()}, nil
+	}
+	// tun2socks needs wintun.dll on Windows; Xray's archive bundles it. If we
+	// don't have it yet, fetch Xray-core (into xray-core/) and copy it beside
+	// the tun2socks binary so TUN mode works out of the box.
+	if runtime.GOOS == "windows" && !tun2socks.HasWintun() {
+		s.log("Fetching Xray-core to obtain wintun.dll (needed for TUN)…", "ACCENT")
+		if _, derr := xray.Download(appDir(), s.bus.Log); derr != nil {
+			s.log("Could not auto-fetch wintun.dll: "+derr.Error(), "WARN")
+		}
+	}
+	if runtime.GOOS == "windows" {
+		tun2socks.EnsureWintunBeside(dir)
 	}
 	return map[string]any{"ok": true, "path": path}, nil
 }

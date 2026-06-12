@@ -618,6 +618,24 @@ func (r *Runner) CAPEM() []byte {
 	return r.caPEM
 }
 
+// CAKeyPEM returns the CA private key in PEM (EC PRIVATE KEY). Needed to build a
+// self-contained Xray MITM config that issues per-host leaf certs on-device.
+func (r *Runner) CAKeyPEM() []byte {
+	r.mu.Lock()
+	defer r.mu.Unlock()
+	if r.caCert == nil {
+		_ = r.ensureCA()
+	}
+	if r.caKey == nil {
+		return nil
+	}
+	keyDER, err := x509.MarshalECPrivateKey(r.caKey)
+	if err != nil {
+		return nil
+	}
+	return pem.EncodeToMemory(&pem.Block{Type: "EC PRIVATE KEY", Bytes: keyDER})
+}
+
 // ---- local CA + per-host leaf certs ---------------------------------------
 
 func (r *Runner) ensureCA() error {

@@ -52,6 +52,9 @@ type ParsedURI struct {
 	SNI           string `json:"sni"`
 	Type          string `json:"type"`
 	Path          string `json:"path"`
+	WSHost        string `json:"ws_host"`     // ws/h2 Host header (host=), may differ from server host
+	ALPN          string `json:"alpn"`        // comma-separated, e.g. h2,http/1.1
+	Fingerprint   string `json:"fingerprint"` // uTLS fingerprint (fp=), e.g. chrome
 	TLS           bool   `json:"tls"`
 	AllowInsecure bool   `json:"allow_insecure"`
 	Valid         bool   `json:"valid"`
@@ -101,6 +104,9 @@ func ParseURI(uri string) ParsedURI {
 		r.SNI = sni
 		r.Type = typ
 		r.Path = path
+		r.WSHost = qs.Get("host")
+		r.ALPN = qs.Get("alpn")
+		r.Fingerprint = qs.Get("fp")
 		r.TLS = security == "tls" || security == "reality" || security == "xtls"
 		r.AllowInsecure = truthy(qs.Get("allowInsecure")) || truthy(qs.Get("allowinsecure"))
 		r.Valid = true
@@ -149,6 +155,7 @@ func ParseURI(uri string) ParsedURI {
 		r.SNI = sni
 		r.Type = typ
 		r.Path = d.Path
+		r.WSHost = d.Host
 		r.TLS = strings.ToLower(d.TLS) == "tls"
 		r.AllowInsecure = truthy(fmt.Sprintf("%v", d.AI)) || (d.Vfy != nil && !truthy(fmt.Sprintf("%v", d.Vfy)))
 		r.Valid = true
@@ -187,6 +194,9 @@ func ParseURI(uri string) ParsedURI {
 		r.SNI = sni
 		r.Type = typ
 		r.Path = path
+		r.WSHost = qs.Get("host")
+		r.ALPN = qs.Get("alpn")
+		r.Fingerprint = qs.Get("fp")
 		r.TLS = qs.Get("security") != "none" // trojan defaults to TLS
 		r.AllowInsecure = truthy(qs.Get("allowInsecure")) || truthy(qs.Get("allowinsecure"))
 		r.Valid = host != "" && pw != ""

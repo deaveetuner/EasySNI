@@ -107,6 +107,13 @@ func Download(destDir string, log LogFunc) (string, error) {
 		return "", errors.New("tun2socks binary not found in archive")
 	}
 	log("✓ tun2socks extracted to "+destDir, "OK")
+	if runtime.GOOS == "windows" {
+		if EnsureWintunBeside(filepath.Dir(bin)) != "" {
+			log("✓ wintun.dll placed next to tun2socks (from xray-core).", "OK")
+		} else {
+			log("wintun.dll not found yet — download Xray-core (its zip bundles wintun.dll) and it'll be copied here automatically.", "WARN")
+		}
+	}
 	return bin, nil
 }
 
@@ -199,6 +206,74 @@ func wintunDir(bin string) string {
 	return ""
 }
 
+// locateWintunFile returns the path to an existing wintun.dll, searching the
+// app/exe/cwd dirs and their xray-core/ subfolders (Xray's archive bundles it),
+// or "".
+func locateWintunFile() string {
+	var dirs []string
+	add := func(d string) {
+		if d != "" {
+			dirs = append(dirs, d, filepath.Join(d, "xray-core"))
+		}
+	}
+	if exe, err := os.Executable(); err == nil {
+		add(filepath.Dir(exe))
+	}
+	if wd, err := os.Getwd(); err == nil {
+		add(wd)
+	}
+	for _, d := range dirs {
+		p := filepath.Join(d, "wintun.dll")
+		if st, err := os.Stat(p); err == nil && !st.IsDir() {
+			return p
+		}
+	}
+	return ""
+}
+
+func copyFile(src, dst string) error {
+	in, err := os.Open(src)
+	if err != nil {
+		return err
+	}
+	defer in.Close()
+	if err := os.MkdirAll(filepath.Dir(dst), 0o755); err != nil {
+		return err
+	}
+	out, err := os.OpenFile(dst, os.O_CREATE|os.O_TRUNC|os.O_WRONLY, 0o644)
+	if err != nil {
+		return err
+	}
+	defer out.Close()
+	_, err = io.Copy(out, in)
+	return err
+}
+
+// EnsureWintunBeside makes sure wintun.dll sits next to the tun2socks binary in
+// dir, copying it from wherever it's found (typically the xray-core/ folder, as
+// Xray's release zip bundles it). Returns the dll path if present/copied, else
+// "". No-op off Windows.
+func EnsureWintunBeside(dir string) string {
+	if runtime.GOOS != "windows" || dir == "" {
+		return ""
+	}
+	dst := filepath.Join(dir, "wintun.dll")
+	if st, err := os.Stat(dst); err == nil && !st.IsDir() {
+		return dst
+	}
+	src := locateWintunFile()
+	if src == "" {
+		return ""
+	}
+	if copyFile(src, dst) == nil {
+		return dst
+	}
+	return ""
+}
+
+// HasWintun reports whether a wintun.dll is reachable for TUN mode.
+func HasWintun() bool { return locateWintunFile() != "" }
+
 // Runner supervises a tun2socks process.
 type Runner struct {
 	mu      sync.Mutex
@@ -234,10 +309,11 @@ func (r *Runner) Start(bin, socksHost string, socksPort int, excludeIPs []string
 	proxy := "socks5://" + socksHost + ":" + strconv.Itoa(socksPort)
 	workDir := ""
 	if runtime.GOOS == "windows" {
+		EnsureWintunBeside(filepath.Dir(bin)) // copy from xray-core if needed
 		if d := wintunDir(bin); d != "" {
 			workDir = d // run where wintun.dll lives so Windows can load it
 		} else {
-			r.log("wintun.dll not found — Windows TUN (wintun) needs it. Download Xray-core (its zip includes wintun.dll) or get it from https://www.wintun.net and place it beside the app.", "WARN")
+			r.log("wintun.dll not found — Windows TUN (wintun) needs it. Download Xray-core (its zip includes wintun.dll) and it'll be used automatically, or get it from https://www.wintun.net.", "WARN")
 		}
 	}
 	args := []string{"-device", device(), "-proxy", proxy, "-loglevel", "warn"}

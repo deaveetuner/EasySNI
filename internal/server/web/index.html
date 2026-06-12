@@ -44,6 +44,32 @@
   }
   html[dir=rtl] body{font-family:var(--fa)}
   a{color:var(--accent2)}
+  .seg{display:inline-flex;border:1px solid var(--border);border-radius:var(--r-sm);overflow:hidden;background:var(--panel2)}
+  .seg .segbtn{border:none;background:transparent;color:var(--dim);padding:7px 16px;cursor:pointer;font-family:inherit;font-size:.8rem;transition:.15s}
+  .seg .segbtn.active{background:color-mix(in srgb,var(--accent) 20%,transparent);color:var(--bright);font-weight:600}
+  .seg .segbtn:not(.active):hover{color:var(--text)}
+  .panels-list{display:flex;flex-direction:column;gap:12px}
+  .panel-item{border:1px solid var(--border);border-left:3px solid var(--accent);border-radius:12px;padding:13px 15px;background:var(--panel2);transition:transform .12s ease, box-shadow .15s ease, border-color .15s}
+  .panel-item.is-pages{border-left-color:var(--accent2)}
+  .panel-item:hover{transform:translateY(-2px);box-shadow:0 10px 26px rgba(0,0,0,.28)}
+  .pi-head{display:flex;align-items:center;gap:9px;margin-bottom:9px}
+  .pi-name{font-weight:700;font-size:1rem;color:var(--bright)}
+  .pi-date{font-size:.7rem;color:var(--dim)}
+  .pi-x{margin-inline-start:auto;background:transparent;border:none;color:var(--dim);cursor:pointer;font-size:14px;padding:3px 7px;border-radius:7px}
+  .pi-x:hover{background:color-mix(in srgb,var(--danger) 20%,transparent);color:var(--danger)}
+  .pbadge{font-size:.66rem;font-weight:700;letter-spacing:.06em;padding:2px 8px;border-radius:20px;text-transform:uppercase}
+  .pbadge.worker{background:color-mix(in srgb,var(--accent) 22%,transparent);color:var(--accent)}
+  .pbadge.pages{background:color-mix(in srgb,var(--accent2) 22%,transparent);color:var(--accent2)}
+  .pi-row{display:flex;gap:10px;align-items:baseline;font-size:.82rem;margin:3px 0}
+  .pi-k{flex:0 0 120px;color:var(--dim)}
+  .pi-row a{word-break:break-all}
+  .pi-copy{cursor:pointer;word-break:break-all;background:var(--inputbg);padding:2px 7px;border-radius:6px;border:1px solid var(--border);transition:border-color .15s,color .15s}
+  .pi-copy:hover{border-color:var(--accent)}
+  .pi-copy.ok2{color:var(--accent);border-color:var(--accent)}
+  .pi-sub{font-size:.74rem;color:var(--dim)}
+  .pi-acct{font-size:.8rem;color:var(--accent)}
+  .pi-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:11px}
+  .pi-actions .act.ok2{color:var(--accent)}
 
   /* ---------- layout ---------- */
   .app{display:grid;grid-template-columns:clamp(212px,17vw,264px) 1fr;
@@ -426,7 +452,7 @@
       <span><span id="dotProxy" class="dot"></span><span data-i18n="hdr_proxy">Proxy</span> <b id="sProxy">off</b></span>
       <span><span id="dotMitm" class="dot"></span><span data-i18n="hdr_mitm">MITM</span> <b id="sMitm">off</b></span>
       <span><span id="dotTor" class="dot"></span><span data-i18n="hdr_tor">Tor</span> <b id="sTor">off</b></span>
-      <span class="xpill off" id="hdrXray"><span data-i18n="hdr_xray">xray</span> <b id="hdrXrayState">off</b><label class="hdrtun" title="TUN"><input type="checkbox" id="hdrTun"><span data-i18n="hdr_tun">TUN</span></label><button id="hdrSysSet" data-i18n="hdr_sysset" title="Set the OS system proxy to xray">Set Proxy</button><button id="hdrSysClear" data-i18n="hdr_sysclear" title="Clear the OS system proxy">Clear Proxy</button><button id="hdrXrayStart" data-i18n="c_start">Start</button><button id="hdrXrayStop" hidden data-i18n="c_stop">Stop</button></span>
+      <span class="xpill off" id="hdrXray"><span data-i18n="hdr_xray">xray</span> <b id="hdrXrayState">off</b><label class="hdrtun" title="TUN"><input type="checkbox" id="hdrTun" checked><span data-i18n="hdr_tun">TUN</span></label><button id="hdrSysSet" data-i18n="hdr_sysset" title="Set the OS system proxy to xray">Set Proxy</button><button id="hdrSysClear" data-i18n="hdr_sysclear" title="Clear the OS system proxy">Clear Proxy</button><button id="hdrXrayStart" data-i18n="c_start">Start</button><button id="hdrXrayStop" hidden data-i18n="c_stop">Stop</button></span>
       <button class="themebtn" id="themeBtn" title="Toggle light / dark theme">☀</button>
       <button class="langbtn" id="langBtn">فارسی</button>
     </div>
@@ -710,7 +736,7 @@
           <li data-i18n="mdf_u2">Install &amp; trust the CA below so the proxy can read your HTTPS locally (it never leaves your machine).</li>
           <li data-i18n="mdf_u3">Browse normally — sites on the mapped CDNs go out fronted; everything else passes through.</li>
         </ol>
-        <div class="row"><button class="act btn-alt" id="mdf_ca" data-i18n="c_download_ca">Download CA (.pem)</button><button class="act btn-alt" id="mdf_ca_crt" data-i18n="c_download_ca_crt">Download CA (.crt · Windows)</button><span class="scanmeta" id="mdf_cameta"></span></div>
+        <div class="row"><button class="act btn-alt" id="mdf_ca" data-i18n="c_download_ca">Download CA (.pem)</button><button class="act btn-alt" id="mdf_ca_crt" data-i18n="c_download_ca_crt">Download CA (.crt · Windows)</button><button class="act btn-go" id="mdf_phone" data-i18n="c_phone_setup">📱 Phone setup (v2ray + cert)</button><span class="scanmeta" id="mdf_cameta"></span></div>
         <div class="warnbox" style="margin-top:12px" data-i18n="mdf_warn">The CA decrypts your HTTPS on this device only, to re-front it — the private key never leaves your machine. Fronting only helps for sites already on a supported CDN, and works against SNI-based blocking (not destination-IP sanctions). Use within each provider's terms and your local laws.</div>
         <p class="hint" style="margin-top:14px;text-align:center;opacity:.85" data-i18n="mdf_thanks">Thanks to patterniha — this is V2RayEz's own implementation of the MITM domain-fronting technique.</p>
       </div>
@@ -833,8 +859,8 @@
         <div class="grid g2" style="margin-top:14px">
           <label><span class="lbl" data-i18n="f_engine">Engine</span>
             <select id="xr_engine">
-              <option value="xray" data-i18n="opt_xray_socks">xray — local SOCKS5 proxy</option>
               <option value="xray-tun" data-i18n="opt_xray_tun">xray + TUN (tun2socks — no sing-box)</option>
+              <option value="xray" data-i18n="opt_xray_socks">xray — local SOCKS5 proxy</option>
               <option value="singbox" data-i18n="opt_singbox_tun">sing-box — system-wide TUN VPN</option>
             </select>
           </label>
@@ -1066,31 +1092,65 @@
     </section>
 
     <!-- CLOUDFLARE WORKER MAKER -->
-    <section class="panel" data-panel="cfworker">
-      <h1 data-i18n="cfw_h1">Cloudflare Worker <span class="tag" style="font-size:10px;color:var(--accent2);border:1px solid rgba(90,169,255,.42);border-radius:5px;padding:2px 7px;vertical-align:middle;font-family:var(--mono);letter-spacing:.12em" data-i18n="badge_new">NEW</span></h1>
-      <p class="sub" data-i18n="cfw_sub">Spin up your own free VLESS proxy on a Cloudflare Worker in a couple of minutes. Generate a UUID, follow the steps, then build matching client configs in the Edge Tunnel tab.</p>
+    <section class="panel" data-panel="ezbpb">
+      <h1 data-i18n="bpb_h1">EzBPB <span class="tag" style="font-size:10px;color:var(--accent2);border:1px solid rgba(90,169,255,.42);border-radius:5px;padding:2px 7px;vertical-align:middle;font-family:var(--mono);letter-spacing:.12em" data-i18n="badge_new">NEW</span></h1>
+      <p class="sub" data-i18n="bpb_sub">Deploy your own BPB Worker Panel to your Cloudflare account in one click — VLESS + Trojan subscriptions on Cloudflare's edge.</p>
+
       <div class="card">
-        <h2 data-i18n="cfw_step_t">Step-by-step</h2>
-        <ol class="steps">
-          <li data-i18n="cfw_s1">Sign in at dash.cloudflare.com → Compute → Workers &amp; Pages → Create application → Worker → Deploy.</li>
-          <li data-i18n="cfw_s2">Click “Edit code”, delete the default code, and paste the edgetunnel _worker.js (github.com/cmliu/edgetunnel) — or any VLESS worker you trust.</li>
-          <li data-i18n="cfw_s3">Settings → Variables: add UUID = the value below. (Optional: PROXYIP, ADMIN for the panel.) Bind a KV namespace named KV. Save &amp; Deploy.</li>
-          <li data-i18n="cfw_s4">Triggers → add a custom domain (e.g. vless.yourdomain.com) so a clean SNI is available.</li>
-          <li data-i18n="cfw_s5">Go to the Edge Tunnel tab, enter your worker domain + this UUID, and generate ready-to-use configs.</li>
-        </ol>
+        <h2 data-i18n="bpb_token_t">1 · Cloudflare API token</h2>
+        <p class="hint" data-i18n="bpb_token_h">Create a token at dash.cloudflare.com → My Profile → API Tokens → Create Token → Create Custom Token, with permissions: Account · Workers Scripts · Edit, Account · Workers KV Storage · Edit, and Account · Account Settings · Read. Paste it here.</p>
+        <div class="row" style="margin-top:8px">
+          <input id="bpb_token" type="password" placeholder="Cloudflare API token" style="flex:1;min-width:240px">
+          <button class="act btn-alt" id="bpb_verify" data-i18n="bpb_verify">Verify</button>
+          <button class="act btn-ghost" id="bpb_toksave" data-i18n="bpb_toksave">Save token</button>
+        </div>
+        <div class="row" id="bpb_tokrow" style="display:none;margin-top:8px">
+          <span class="lbl" data-i18n="bpb_savedtok">Saved tokens</span>
+          <select id="bpb_toklist" style="flex:1;min-width:160px"></select>
+          <button class="act btn-alt" id="bpb_tokuse" data-i18n="bpb_tokuse">Use</button>
+          <button class="act btn-ghost" id="bpb_tokdel" data-i18n="bpb_paneldel">Delete</button>
+        </div>
+        <div id="bpb_acctrow" style="display:none;margin-top:10px">
+          <label><span class="lbl" data-i18n="bpb_account">Account</span><select id="bpb_account"></select></label>
+        </div>
+        <div id="bpb_tokmeta" class="scanmeta"></div>
       </div>
+
       <div class="card">
-        <h2 data-i18n="cfw_env_t">Your values</h2>
-        <div class="grid g2">
-          <label><span class="lbl" data-i18n="f_edge_uuid">UUID</span><input id="cfw_uuid" placeholder="click Generate"></label>
-          <label><span class="lbl" data-i18n="f_cfw_proxyip">PROXYIP (optional)</span><input id="cfw_proxyip" placeholder="proxyip.cmliussss.net"></label>
+        <h2 data-i18n="bpb_cfg_t">2 · Panel settings</h2>
+        <p class="hint" data-i18n="bpb_cfg_h">Secure values are pre-filled — press Generate for new ones, or type your own.</p>
+        <div class="row" style="margin-top:8px;align-items:center;gap:10px">
+          <span class="lbl" data-i18n="bpb_mode">Deploy to</span>
+          <div class="seg" id="bpb_modeseg">
+            <button type="button" class="segbtn active" data-mode="worker">Worker</button>
+            <button type="button" class="segbtn" data-mode="pages">Pages</button>
+          </div>
+          <span class="hint" id="bpb_modehint" data-i18n="bpb_mode_worker">Deploys to &lt;name&gt;.workers.dev</span>
         </div>
-        <div class="row" style="margin-top:12px">
-          <button class="act btn-go" id="cfw_gen" data-i18n="c_new_uuid">Generate UUID</button>
-          <button class="act btn-alt" id="cfw_toedge" data-i18n="c_copy_uuid">Copy UUID</button>
-          <span class="scanmeta" id="cfw_meta"></span>
+        <div class="grid2" style="margin-top:8px">
+          <label><span class="lbl" data-i18n="bpb_name">Project name</span><input id="bpb_name" value="EzAccess-Project" placeholder="EzAccess-Project"></label>
+          <label><span class="lbl" data-i18n="bpb_login">Panel password</span><input id="bpb_panelpwd" placeholder="panel login password"></label>
+          <label><span class="lbl" data-i18n="bpb_uuid">UUID</span><input id="bpb_uuid"></label>
+          <label><span class="lbl" data-i18n="bpb_trojan">Trojan password</span><input id="bpb_trojan"></label>
+          <label><span class="lbl" data-i18n="bpb_subpath">Subscription path</span><input id="bpb_subpath"></label>
+          <label><span class="lbl" data-i18n="bpb_proxyip">Proxy IP / domain</span><input id="bpb_proxyip" placeholder="leave empty for auto rotating IPs"></label>
+          <label><span class="lbl" data-i18n="bpb_fallback">Fallback domain</span><input id="bpb_fallback" placeholder="hcaptcha.com"></label>
         </div>
-        <div class="warnbox" style="margin-top:14px" data-i18n="cfw_warn">This panel only generates values and instructions — it never logs into or changes your Cloudflare account. Deploy and run the worker yourself, in line with Cloudflare's terms and your local laws.</div>
+        <div class="row" style="margin-top:10px">
+          <button class="act btn-alt" id="bpb_gen" data-i18n="bpb_gen">Generate values</button>
+          <button class="act btn-go" id="bpb_deploy" data-i18n="bpb_deploy">Deploy panel</button>
+        </div>
+        <div id="bpb_out" style="margin-top:12px"></div>
+      </div>
+
+      <div class="card" id="bpb_resultcard" style="display:none">
+        <h2 data-i18n="bpb_result_t">3 · Your Panels</h2>
+        <div id="bpb_panels_list" class="panels-list"></div>
+      </div>
+
+      <div class="row" style="justify-content:center;gap:18px;margin-top:14px;font-size:.82rem">
+        <a href="https://github.com/macan-dev/EasySNI" target="_blank">⭐ GitHub</a>
+        <a href="https://youtube.com/@MacanDev" target="_blank">▶ YouTube · @MacanDev</a>
       </div>
     </section>
 
@@ -1179,9 +1239,8 @@
     </section>
 
     <section class="panel" data-panel="about">
-      <h1 data-i18n="about_h1">About</h1>
       <div class="hero">
-        <span class="ver">V2RayEz · v4.6.5</span>
+        <span class="ver">V2RayEz · v4.7.5</span>
         <h1 data-i18n="about_app">V2RayEz — DPI Bypass &amp; CDN Toolkit</h1>
         <p data-i18n="about_tagline">An all-in-one panel for beating DPI: SNI tunnel, Cloudflare edge &amp; config scanners that build ranked working configs, an xray client you can run on-device, plus Psiphon and SPlus tunnels — one fast, offline Go app you can open from any device on your network.</p>
         <div class="credit">
@@ -1219,6 +1278,8 @@
       <div class="card">
         <h2 data-i18n="about_updates_t">What's new</h2>
         <ul class="changelog">
+          <li><b>v4.7.5</b> <span data-i18n="about_u_475">— EzBPB polish: Generate now also creates a unique project name; deploy as Cloudflare Worker or Pages with a clean auto subdomain; panel password moved into Panel Settings and pre-set in KV; saved Cloudflare API tokens (named by account); redesigned “Your Panels” cards; bundled panel re-themed dark by default with the V2RayEz look and a new icon.</span></li>
+          <li><b>v4.7.1</b> <span data-i18n="about_u_471">— New EzBPB section: deploy your own bundled V2RayEz panel to Cloudflare (Worker or Pages) in one click.</span></li>
           <li><b>v4.6.5</b> <span data-i18n="about_u_465">— Config table shows 10 rows then scrolls; Auto-get bridges now rotates through obfs4 &amp; WebTunnel pools (2 at a time for conflux); whole-system Tor (TUN) routing fixed — tun2socks log level corrected and the TUN adapter is auto-configured with default route + DNS, keeping bridge IPs on the physical link; WinDivert.dll loads from the windivert/ folder; ezsni-config.json moved into the configs folder.</span></li>
           <li><b>v4.6.1</b> <span data-i18n="about_u_461">— Donation tab with QR codes for BTC/ETH/SOL/BNB/TRON/USDT; WinDivert one-click download; collapsible sidebar sections (Scanners collapsed by default); updates now read the official GitHub releases (github.com/macan-dev/EasySNI) without api.github.com; GitHub &amp; YouTube links; WinDivert moved to Library.</span></li>
           <li><b>v4.5.2</b> <span data-i18n="about_u_452">— App Update tab (check &amp; download new versions without api.github.com); full-archive extract for sing-box/tun2socks; all config files saved in one configs/ folder; Tor pluggable transports incl. conjure with captcha bridge requests; download progress bar.</span></li>
@@ -1270,7 +1331,7 @@ const I18N = {
   en:{
     hdr_edition:"By MacanDev · @EzAccess1", hdr_proxy:"SNI Tunnel", hdr_mitm:"MITM", hdr_tor:"Tor", hdr_xray:"xray", badge_new:"NEW",
     nav_update:"Update", upd_h1:"App Update", upd_sub:"Check for a newer version of V2RayEz and download it. Updates are fetched over raw.githubusercontent.com, which works where api.github.com is blocked.", upd_current:"Current version", upd_mirror:"GitHub mirror (optional, if blocked)", upd_check:"Check for updates", upd_download:"Download update", upd_avail:"is available.", upd_latest:"You're on the latest version.", upd_done:"Close V2RayEz and replace the old executable with this file.", about_u_452:"— App Update tab (check & download new versions without api.github.com); full-archive extract for sing-box/tun2socks; all config files in one configs/ folder; Tor transports incl. conjure with captcha bridge requests; download progress bar.",
-    nav_donation:"Donation", don_h1:"Support V2RayEz", don_sub:"V2RayEz is free and open. If it helps you stay connected, a donation keeps development and servers alive. Thank you for your support!", don_thanks:"Every contribution, big or small, is deeply appreciated. ❤️", c_download_wd:"Download WinDivert", about_youtube:"YouTube tutorial", about_u_461:"— Donation tab with QR codes; WinDivert one-click download; collapsible sidebar sections; updates read the official GitHub releases without api.github.com; GitHub & YouTube links.", about_u_465:"— Config table shows 10 rows then scrolls; Auto-get bridges rotates through obfs4 & WebTunnel pools; whole-system Tor (TUN) routing fixed; WinDivert.dll loads from the windivert folder; config files consolidated.",
+    nav_donation:"Donation", don_h1:"Support V2RayEz", don_sub:"V2RayEz is free and open. If it helps you stay connected, a donation keeps development and servers alive. Thank you for your support!", don_thanks:"Every contribution, big or small, is deeply appreciated. ❤️", c_download_wd:"Download WinDivert", about_youtube:"YouTube tutorial", about_u_461:"— Donation tab with QR codes; WinDivert one-click download; collapsible sidebar sections; updates read the official GitHub releases without api.github.com; GitHub & YouTube links.", about_u_475:"— EzBPB polish: Generate also creates a unique project name; deploy as Worker or Pages with a clean auto subdomain; panel password in Panel Settings and pre-set in KV; saved Cloudflare API tokens; redesigned Your Panels cards; dark-by-default re-themed panel with new icon.", about_u_471:"— New EzBPB section: deploy your own bundled V2RayEz panel to Cloudflare (Worker or Pages) in one click, with auto KV, auto subdomain, and pre-set panel password; saved panels & saved Cloudflare tokens; TUN default engine; subscriptions and full Xray config files import all their proxies; ws+tls CDN configs test correctly.", about_u_465:"— Config table shows 10 rows then scrolls; Auto-get bridges rotates through obfs4 & WebTunnel pools; whole-system Tor (TUN) routing fixed; WinDivert.dll loads from the windivert folder; config files consolidated.",
     sec_tunnels:"Tunnels", sec_scanners:"Scanners", sec_tools:"Tools", sec_library:"Library",
     nav_configs:"Configs", nav_edge:"Edge Tunnel", nav_sites:"Site Scanner", nav_cfworker:"CF Worker", nav_gtun:"Google Tunnel", nav_mitmdf:"Domain Fronting",
     nav_tor:"Tor Network", tor_h1:"Tor Network", c_tor_getbridges:"Auto-get bridges", c_tor_snowflake:"Get Snowflake bridge", c_tor_captcha:"Request bridges (captcha)", tor_captcha_h:"Solve the captcha to get fresh bridges from Tor's BridgeDB.", tor_captcha_ph:"Type the characters you see", tor_captcha_wrong:"Wrong captcha — try again", c_tor_download:"Download Tor + dependencies", tor_sub:"Connect through the Tor network with optional pluggable transports for censored networks, and route the whole system through it with TUN. Needs the Tor Expert Bundle (the tor binary plus transport binaries like lyrebird/obfs4proxy and snowflake-client).", tor_step1:"① Transport & bridges", tor_step2:"② Connect", f_tor_transport:"Pluggable transport", opt_tor_none:"None (direct Tor)", f_tor_socks:"Local SOCKS port", tor_bridges_h:"Paste bridge lines (one per line) for the selected transport — get them from bridges.torproject.org or the Tor Browser. Not needed for None.", f_tor_bin:"tor binary path (blank = auto-detect)", f_tor_pt:"Transport binary path (blank = auto)", f_tor_tun:"Route the whole system through Tor (TUN — needs admin & tun2socks)", tor_warn:"Once connected, set your browser/app SOCKS5 proxy to 127.0.0.1 and the port above, or enable TUN to route everything. Pluggable transports require their binaries from the Tor Expert Bundle.",
@@ -1314,7 +1375,7 @@ const I18N = {
     cfgm_group_name:"Group name:", cfgm_del_confirm:"Delete this group and its configs?",
     c_add_group:"+ Group", c_rename_group:"Rename", c_del_group:"Delete group", c_import_folder:"Import from folder", c_add_to_group:"Add to group",
     c_import_sub:"Import subscription", c_test_group:"Ping test group", th_name:"Name", th_relay:"Relay", th_tcp:"TCP ping", th_speed:"Speedtest", c_ping_group:"Ping Test Group", c_relay_group:"Relay Test Group", c_speed_group:"SpeedTest Group", c_sort_relay:"Sort by Relay", c_stop_test:"Stop test", cfgm_table_hint:"Click to select · Ctrl/⌘ or Shift for multi-select · double-click to connect · right-click for more · Delete removes selected · Esc stops a running test.", c_copy_group:"Copy group",
-    c_edit:"Edit", c_delete:"Delete", c_close:"Close", c_ok:"OK",
+    c_edit:"Edit", c_delete:"Delete", c_close:"Close", c_qr_raw:"This is a full Xray config — copy the text above to share it (QR is only for share links).", c_ok:"OK",
     edge_h1:"Edge Tunnel", edge_sub:"Build VLESS-over-WebSocket client configs for a Cloudflare Worker / Pages edgetunnel deployment (cmliu/edgetunnel). Deploy the worker with your UUID, then generate ready-to-use configs here — point them at a clean Cloudflare IP while keeping your worker domain as SNI/Host.",
     edge_gen_t:"Generate configs", edge_deploy_t:"How to deploy",
     f_edge_host:"Worker / Pages domain (SNI & Host)", f_edge_uuid:"UUID", f_edge_addr:"Dial address (clean CF IP / domain — optional)",
@@ -1326,7 +1387,7 @@ const I18N = {
     edge_d4:"Generate configs here, send them to the Library, then run the CDN Configs scanner to find the fastest clean edge IPs for them.",
     edge_warn:"This tool only builds client links and never touches your Cloudflare account. Deploy and manage the worker yourself, per your local laws.",
     cc_more_results:"More edges",
-    nav_proxy:"SNI Tunnel", nav_splus:"SPlus Tunnel", nav_psiphon:"Psiphon", nav_xray:"XRay Core", nav_massuri:"Mass URI", nav_sniscan:"SNI Scan", nav_cdnconfigs:"CDN Configs",
+    sec_ezbpb:"EzBPB", nav_ezbpb:"EzBPB Panel", bpb_h1:"EzBPB ", bpb_sub:"Deploy your own panel (bundled in the app) to your Cloudflare account in one click — VLESS + Trojan subscriptions on Cloudflare's edge.", bpb_token_t:"1 · Cloudflare API token", bpb_token_h:"Create a token at dash.cloudflare.com → My Profile → API Tokens → Create Token → Create Custom Token, with permissions: Account · Workers Scripts · Edit, Account · Workers KV Storage · Edit, and Account · Account Settings · Read. Paste it here.", bpb_verify:"Verify", bpb_account:"Account", bpb_toksave:"Save token", bpb_savedtok:"Saved tokens", bpb_tokuse:"Use", bpb_tokname:"Name this token:", bpb_toksaved:"Token saved",  bpb_cfg_t:"2 · Panel settings", bpb_cfg_h:"Secure values are pre-filled — press Generate for new ones, or type your own. Avoid the words bpb / vpn / proxy in the project name (Cloudflare may ban it).", bpb_name:"Project name", bpb_uuid:"UUID", bpb_trojan:"Trojan password", bpb_subpath:"Subscription path", bpb_proxyip:"Proxy IP / domain", bpb_fallback:"Fallback domain", bpb_gen:"Generate values", bpb_deploy:"Deploy panel", bpb_result_t:"3 · Your Panels", bpb_panel_url:"Panel", bpb_login:"Panel password", bpb_sub_url:"Subscription", bpb_import:"Import configs", bpb_open:"Open panel", bpb_paneldel:"Delete", bpb_madeby:"Made by", bpb_note:"Your token stays on this machine and is sent only to Cloudflare. The panel is bundled inside the app and uploaded to your worker. A workers.dev subdomain is registered automatically if your account doesn't have one. After deploying, open the panel, log in with your UUID, and import the subscription into your configs.", bpb_wjs_t:"4 · Worker script (advanced)", bpb_wjs_h:"Optional. The panel is bundled inside the app and deployed to your worker. Load it here to view or edit before deploying; leave empty to deploy the bundled build untouched.", bpb_wjs_load:"Load bundled panel", bpb_wjs_clear:"Clear", bpb_pwd_t:"3 · Panel password", bpb_pwd_h:"The password to log into the panel UI. The panel asks you to set it the first time you open it — use the value below. Keep it private.", bpb_genpwd:"Generate", bpb_mode:"Deploy to", bpb_mode_worker:"Deploys to <name>.workers.dev", bpb_mode_pages:"Deploys to <name>.pages.dev", bpb_need_token:"Paste a Cloudflare API token first.", bpb_deploying:"Deploying to Cloudflare…", bpb_done:"Panel deployed!", bpb_import_wait:"No configs yet — the panel may need a minute to warm up. Open the panel, then try Import again.", nav_proxy:"SNI Tunnel", nav_splus:"SPlus Tunnel", nav_psiphon:"Psiphon", nav_xray:"XRay Core", nav_massuri:"Mass URI", nav_sniscan:"SNI Scan", nav_cdnconfigs:"CDN Configs",
     nav_mass:"Mass SNI Scan", nav_cf:"Clean IP Scanner", nav_cdnedge:"CDN Edge Test", nav_uri:"URI Parser", nav_windivert:"WinDivert", nav_about:"About",
     c_start_proxy:"Start proxy", c_stop:"Stop", c_check_port:"Check port", c_run_relay:"Run relay test",
     c_start_tunnel:"Start tunnel", c_run_test:"Run test", c_test:"Test", c_scan:"Scan", c_parse:"Parse",
@@ -1390,9 +1451,9 @@ const I18N = {
     c_speedtest:"Speed test", c_share:"Share / QR", c_load_sni:"Load SNI Configs", cfgm_sni_grp:"SNI Spoof", c_copy_uuid:"Copy UUID",
     cfgm_edit_t:"Edit config", ed_allowinsecure:"Allow insecure (skip TLS certificate check). Default OFF — only enable for self-signed servers.", ed_name:"Name", ed_address:"Address (host / IP)", ed_port:"Port", ed_uuid:"UUID", ed_password:"Password",
     ed_method:"Cipher (method)", ed_encryption:"Encryption", ed_flow:"Flow", ed_network:"Network (transport)", ed_path:"Path / service",
-    ed_hosthdr:"Host header", ed_security:"Security", ed_sni:"SNI", ed_fp:"uTLS fingerprint", ed_alpn:"ALPN",
+    ed_hosthdr:"Host header", ed_rawcfg:"Full Xray config (JSON)", ed_security:"Security", ed_sni:"SNI", ed_fp:"uTLS fingerprint", ed_alpn:"ALPN",
     ed_unparsed:"This link couldn't be parsed into fields — edit the raw URI directly.",
-    hdr_tun:"TUN", hdr_sysset:"Set Proxy", hdr_sysclear:"Clear Proxy", c_download_ca:"Download CA (.pem)", c_download_ca_crt:"Download CA (.crt · Windows)", f_autosave:"Auto-save everything (restore on next launch)",cfg_h2:"Everything across all tabs auto-saves to the app's running folder and restores on launch. You can also save/load an explicit file here.",
+    hdr_tun:"TUN", hdr_sysset:"Set Proxy", hdr_sysclear:"Clear Proxy", c_phone_setup:"📱 Phone setup (v2ray + cert)", c_standalone:"🌐 Standalone phone config (no PC)", sa_keytip:"This config embeds your CA private key so Xray can re-sign TLS on the device — keep this file private and don't share it.", sa_pc_t:"Windows / PC (v2rayN)", sa_pc1:"Use a recent v2rayN with Xray core (Core type must be set to Xray).", sa_pc2:"Install the certificate as a TRUSTED ROOT: Settings → Privacy & security → Security → Manage certificates → Manage imported certificates from Windows → Trusted Root Certification Authorities → Import → pick the .crt → store = Trusted Root Certification Authorities.", sa_pc3:"v2rayN → Configuration → Add a custom configuration → import this .json → set Core type = Xray and LEAVE THE SOCKS PORT EMPTY.", sa_pc4:"Select the config, then right-click the tray icon → Set system proxy (icon turns red). Do NOT use TUN mode — it sends raw TLS to the inbound and fails.", sa_pc5:"Browse in Chrome/Edge (they use the Windows root store). It works only for sites on a supported CDN (Google / Fastly / Meta), and cannot bypass IP-based blocks.", sa_intro:"This config runs the domain-fronting entirely inside Xray on your phone — no PC needed, works anywhere. Install the certificate once, import the config, and connect. (Needs Xray core 26.2.6+, e.g. v2rayNG / v2box / Streisand.)", sa_dl_cfg:"Download standalone config", sa_ios1:"Install a v2ray/Xray client that supports Xray 26.2.6+ (v2box or Streisand).", sa_ios2:"Download the certificate, then Settings → General → VPN & Device Management → install the profile, and General → About → Certificate Trust Settings → turn ON full trust.", sa_ios3:"Import the standalone config into the client (open the file or paste it as a custom config).", sa_ios4:"Connect. Everything happens on the phone — this PC can be off.", sa_and1:"Install v2rayNG (recent version with Xray 26.2.6+).", sa_and2:"Download the certificate and install it: Settings → Security → Encryption & credentials → Install a certificate → CA certificate.", sa_and3:"In v2rayNG: + → Import config from file / Import custom config, choose the standalone config.", sa_and4:"Select the profile and connect. No PC required.", sa_note:"Most common mistake: running in TUN mode. This method needs Set-system-proxy mode (PC) / proxy mode, so the browser sends a proper CONNECT; TUN delivers raw TLS to the inbound and you get an invalid-method error. Also make sure the certificate is installed as a TRUSTED ROOT, and on non-rooted Android it only works in Chromium browsers (not native apps).", sa_credit:"MITM domain-fronting technique by @patterniha · config generated by V2RayEz.", c_close:"Close", ph_qr_ios:"Scan to install iOS profile", ph_dl_ios:"Get iOS profile (.mobileconfig)", ph_ios2b:"Scan the iOS-profile QR (or open the .mobileconfig link) in Safari — tap Allow when it says “This website is trying to download a configuration profile.”", ph_ios3b:"Settings → General → VPN & Device Management → tap the V2RayEz profile → Install. Then Settings → General → About → Certificate Trust Settings → turn ON full trust for V2RayEz.", sa_ios2b:"Download the iOS profile (.mobileconfig) and open it — Settings → General → VPN & Device Management → Install. Then General → About → Certificate Trust Settings → turn ON full trust.", ph_intro:"On your phone, install the certificate and import the v2ray config below, then connect. Proxy address:", ph_warn_run:"Start the Domain-Fronting proxy first (Start above), then reopen this.", ph_warn_bind:"The proxy is bound to localhost, so your phone can't reach it. Set its host to all interfaces and restart — bind to", ph_alt_ips:"Other addresses on this PC:", ph_qr_cert:"Scan to get the certificate", ph_qr_cfg:"Scan to get the v2ray config", ph_dl_cert:"Download certificate", ph_dl_cfg:"Download v2ray config", ph_ios_t:"iPhone / iPad", ph_ios1:"Connect the phone to the SAME Wi-Fi as this PC.", ph_ios2:"Scan the certificate QR (or open the download link) in Safari and allow the profile to download.", ph_ios3:"Settings, General, VPN & Device Management — install the V2RayEz profile.", ph_ios4:"Settings, General, About, Certificate Trust Settings — turn ON full trust for V2RayEz.", ph_ios5:"Install a v2ray client (Shadowrocket / v2box / Streisand), import the config (scan its QR or open the file), then connect.", ph_and_t:"Android", ph_and1:"Connect the phone to the SAME Wi-Fi as this PC.", ph_and2:"Scan the certificate QR (or open the link) to download the .crt.", ph_and3:"Settings, Security, Encryption & credentials, Install a certificate, CA certificate — pick the downloaded file.", ph_and4:"Install v2rayNG, tap +, Import config from file/QR, choose the v2ray config (custom config).", ph_and5:"Select the profile and tap connect.", ph_note:"Your phone routes through this PC, which must stay on and connected. The MITM certificate is used only on-LAN to re-front HTTPS; the private key never leaves your PC. Tor SOCKS carries TCP only.", c_download_ca:"Download CA (.pem)", c_download_ca_crt:"Download CA (.crt · Windows)", f_autosave:"Auto-save everything (restore on next launch)",cfg_h2:"Everything across all tabs auto-saves to the app's running folder and restores on launch. You can also save/load an explicit file here.",
     about_f7_t:"sing-box TUN", about_f7_d:"Detect or download sing-box and run any connected config as a system-wide TUN VPN — all device traffic routed through it (needs admin / root).",
     about_f8_t:"Config Library", about_f8_d:"Groups, subscriptions, SNI/Spoof config lists, QR sharing, right-click menu, multi-select with bulk relay/speed tests — all auto-saved across restarts.",
     about_f9_t:"Google Tunnel (Fastly)", about_f9_d:"A domain-fronting relay through Google Apps Script + a Cloudflare Worker you deploy — scripts generated in-app, with a downloadable CA (.pem / .crt).",
@@ -1467,7 +1528,7 @@ const I18N = {
   fa:{
     hdr_edition:"ساختهٔ MacanDev · @EzAccess1", hdr_proxy:"تونل SNI", hdr_mitm:"MITM", hdr_tor:"تور", hdr_xray:"xray", badge_new:"جدید",
     nav_update:"به‌روزرسانی", upd_h1:"به‌روزرسانی برنامه", upd_sub:"نسخهٔ جدید V2RayEz را بررسی و دانلود کنید. به‌روزرسانی‌ها از raw.githubusercontent.com گرفته می‌شوند که در جایی که api.github.com مسدود است کار می‌کند.", upd_current:"نسخهٔ فعلی", upd_mirror:"آینهٔ گیت‌هاب (اختیاری، اگر مسدود است)", upd_check:"بررسی به‌روزرسانی", upd_download:"دانلود به‌روزرسانی", upd_avail:"در دسترس است.", upd_latest:"شما روی آخرین نسخه هستید.", upd_done:"V2RayEz را ببندید و فایل اجرایی قدیمی را با این فایل جایگزین کنید.", about_u_452:"— تب به‌روزرسانی برنامه (بررسی و دانلود نسخهٔ جدید بدون api.github.com)؛ استخراج کامل آرشیو برای sing-box/tun2socks؛ ذخیرهٔ همهٔ فایل‌های کانفیگ در یک پوشهٔ configs؛ ترنسپورت‌های Tor شامل conjure با درخواست بریج کپچا؛ نوار پیشرفت دانلود.",
-    nav_donation:"حمایت مالی", don_h1:"از V2RayEz حمایت کنید", don_sub:"V2RayEz رایگان و آزاد است. اگر برایتان مفید بوده، حمایت شما توسعه و سرورها را زنده نگه می‌دارد. ممنون از حمایت‌تان!", don_thanks:"هر کمکی، کوچک یا بزرگ، بسیار قدردانی می‌شود. ❤️", c_download_wd:"دانلود WinDivert", about_youtube:"آموزش یوتیوب", about_u_461:"— تب حمایت مالی با کدهای QR؛ دانلود یک‌کلیک WinDivert؛ بخش‌های جمع‌شوندهٔ نوار کناری؛ به‌روزرسانی از ریلیزهای رسمی گیت‌هاب بدون api.github.com؛ لینک گیت‌هاب و یوتیوب.", about_u_465:"— جدول کانفیگ ۱۰ ردیف نشان می‌دهد و بقیه با اسکرول؛ دریافت خودکار بریج بین obfs4 و WebTunnel چرخش می‌کند؛ مسیردهی کل سیستم از طریق Tor (TUN) رفع شد؛ WinDivert.dll از پوشهٔ windivert بارگذاری می‌شود؛ فایل‌های کانفیگ یکپارچه شدند.",
+    nav_donation:"حمایت مالی", don_h1:"از V2RayEz حمایت کنید", don_sub:"V2RayEz رایگان و آزاد است. اگر برایتان مفید بوده، حمایت شما توسعه و سرورها را زنده نگه می‌دارد. ممنون از حمایت‌تان!", don_thanks:"هر کمکی، کوچک یا بزرگ، بسیار قدردانی می‌شود. ❤️", c_download_wd:"دانلود WinDivert", about_youtube:"آموزش یوتیوب", about_u_461:"— تب حمایت مالی با کدهای QR؛ دانلود یک‌کلیک WinDivert؛ بخش‌های جمع‌شوندهٔ نوار کناری؛ به‌روزرسانی از ریلیزهای رسمی گیت‌هاب بدون api.github.com؛ لینک گیت‌هاب و یوتیوب.", about_u_475:"— بهبود EzBPB: تولید نام پروژهٔ یکتا؛ دیپلوی Worker یا Pages با ساب‌دامین تمیز خودکار؛ انتقال رمز پنل به تنظیمات و تنظیم خودکار آن در KV؛ ذخیرهٔ توکن‌های Cloudflare؛ بازطراحی کارت‌های پنل‌ها؛ پنل تیرهٔ پیش‌فرض با آیکن جدید.", about_u_471:"— بخش جدید EzBPB: دیپلوی پنل اختصاصی V2RayEz روی Cloudflare (ورکر یا Pages) با یک کلیک، همراه با ساخت خودکار KV و ساب‌دامین و تنظیم خودکار رمز پنل؛ ذخیرهٔ پنل‌ها و توکن‌های Cloudflare؛ موتور پیش‌فرض TUN؛ ایمپورت همهٔ کانفیگ‌ها از ساب و فایل کامل Xray؛ تست درست کانفیگ‌های ws+tls.", about_u_465:"— جدول کانفیگ ۱۰ ردیف نشان می‌دهد و بقیه با اسکرول؛ دریافت خودکار بریج بین obfs4 و WebTunnel چرخش می‌کند؛ مسیردهی کل سیستم از طریق Tor (TUN) رفع شد؛ WinDivert.dll از پوشهٔ windivert بارگذاری می‌شود؛ فایل‌های کانفیگ یکپارچه شدند.",
     sec_tunnels:"تونل‌ها", sec_scanners:"اسکنرها", sec_tools:"ابزارها", sec_library:"کتابخانه",
     nav_configs:"کانفیگ‌ها", nav_edge:"اِج تونل", nav_sites:"اسکنر سایت", nav_cfworker:"ورکر CF", nav_gtun:"تونل گوگل", nav_mitmdf:"دامین‌فرانتینگ",
     nav_tor:"شبکهٔ Tor", tor_h1:"شبکهٔ Tor", c_tor_getbridges:"دریافت خودکار بریج‌ها", c_tor_snowflake:"دریافت بریج Snowflake", c_tor_captcha:"درخواست بریج (کپچا)", tor_captcha_h:"برای گرفتن بریج‌های تازه از BridgeDB، کپچا را حل کنید.", tor_captcha_ph:"کاراکترهایی که می‌بینید را بنویسید", tor_captcha_wrong:"کپچا اشتباه است — دوباره تلاش کنید", c_tor_download:"دانلود Tor و وابستگی‌ها", tor_sub:"از طریق شبکهٔ Tor با ترنسپورت‌های قابل‌اتصال (برای شبکه‌های سانسورشده) وصل شوید و با TUN کل سیستم را از آن عبور دهید. به Tor Expert Bundle نیاز دارد (باینری tor به‌علاوهٔ باینری ترنسپورت‌ها مثل lyrebird/obfs4proxy و snowflake-client).", tor_step1:"① ترنسپورت و بریج‌ها", tor_step2:"② اتصال", f_tor_transport:"ترنسپورت قابل‌اتصال", opt_tor_none:"هیچ‌کدام (Tor مستقیم)", f_tor_socks:"پورت SOCKS محلی", tor_bridges_h:"خطوط بریج (هر کدام در یک خط) برای ترنسپورت انتخاب‌شده را بچسبانید — از bridges.torproject.org یا مرورگر Tor بگیرید. برای «هیچ‌کدام» لازم نیست.", f_tor_bin:"مسیر باینری tor (خالی = یافتن خودکار)", f_tor_pt:"مسیر باینری ترنسپورت (خالی = خودکار)", f_tor_tun:"عبور کل سیستم از Tor (TUN — نیازمند ادمین و tun2socks)", tor_warn:"پس از اتصال، پروکسی SOCKS5 مرورگر/اپ را روی 127.0.0.1 و پورت بالا بگذارید، یا TUN را روشن کنید تا همه‌چیز عبور کند. ترنسپورت‌های قابل‌اتصال به باینری‌های Tor Expert Bundle نیاز دارند.",
@@ -1511,7 +1572,7 @@ const I18N = {
     cfgm_group_name:"نام گروه:", cfgm_del_confirm:"این گروه و کانفیگ‌هایش حذف شوند؟",
     c_add_group:"+ گروه", c_rename_group:"تغییر نام", c_del_group:"حذف گروه", c_import_folder:"وارد کردن از پوشه", c_add_to_group:"افزودن به گروه",
     c_import_sub:"وارد کردن اشتراک", c_test_group:"تست پینگ گروه", th_name:"نام", th_relay:"رله", th_tcp:"پینگ TCP", th_speed:"تست سرعت", c_ping_group:"تست پینگ گروه", c_relay_group:"تست رله گروه", c_speed_group:"تست سرعت گروه", c_sort_relay:"مرتب‌سازی بر اساس رله", c_stop_test:"توقف تست", cfgm_table_hint:"کلیک=انتخاب · Ctrl/⌘ یا Shift=چندتایی · دوبار کلیک=اتصال · راست‌کلیک=بیشتر · Delete=حذف · Esc=توقف تست.", c_copy_group:"کپی گروه",
-    c_edit:"ویرایش", c_delete:"حذف", c_close:"بستن", c_ok:"تأیید",
+    c_edit:"ویرایش", c_delete:"حذف", c_close:"بستن", c_qr_raw:"این یک کانفیگ کامل Xray است — برای اشتراک، متن بالا را کپی کنید (QR فقط برای لینک‌های اشتراک است).", c_ok:"تأیید",
     edge_h1:"اِج تونل", edge_sub:"برای یک دیپلوی edgetunnel روی Cloudflare Worker/Pages (cmliu/edgetunnel) کانفیگ کلاینت VLESS-over-WebSocket بسازید. ورکر را با UUID خود دیپلوی کنید، سپس کانفیگ آمادهٔ استفاده اینجا بسازید — آن‌ها را به یک IP تمیز کلودفلر اشاره دهید و دامنهٔ ورکر را به‌عنوان SNI/Host نگه دارید.",
     edge_gen_t:"ساخت کانفیگ", edge_deploy_t:"نحوهٔ دیپلوی",
     f_edge_host:"دامنهٔ Worker/Pages (SNI و Host)", f_edge_uuid:"UUID", f_edge_addr:"آدرس اتصال (IP/دامنهٔ تمیز CF — اختیاری)",
@@ -1523,7 +1584,7 @@ const I18N = {
     edge_d4:"اینجا کانفیگ بسازید، به کتابخانه بفرستید، سپس اسکنر CDN Configs را اجرا کنید تا سریع‌ترین IP‌های تمیز را پیدا کند.",
     edge_warn:"این ابزار فقط لینک کلاینت می‌سازد و هرگز به حساب کلودفلر شما دست نمی‌زند. ورکر را خودتان طبق قوانین محلی‌تان دیپلوی و مدیریت کنید.",
     cc_more_results:"اِج‌های بیشتر",
-    nav_proxy:"تونل SNI", nav_splus:"تونل SPlus", nav_psiphon:"سایفون", nav_xray:"هستهٔ XRay", nav_massuri:"چک انبوه URI", nav_sniscan:"اسکن SNI", nav_cdnconfigs:"کانفیگ‌های CDN",
+    sec_ezbpb:"EzBPB", nav_ezbpb:"پنل EzBPB", bpb_h1:"EzBPB ", bpb_sub:"پنل خودت (جاسازی‌شده در برنامه) را با یک کلیک روی حساب Cloudflare خودت دیپلوی کن — اشتراک VLESS و Trojan روی لبهٔ Cloudflare.", bpb_token_t:"۱ · توکن API کلودفلر", bpb_token_h:"یک توکن بساز: dash.cloudflare.com → My Profile → API Tokens → Create Token → Create Custom Token با دسترسی‌های: Account · Workers Scripts · Edit و Account · Workers KV Storage · Edit و Account · Account Settings · Read. سپس اینجا بچسبان.", bpb_verify:"بررسی", bpb_account:"حساب", bpb_toksave:"ذخیرهٔ توکن", bpb_savedtok:"توکن‌های ذخیره‌شده", bpb_tokuse:"استفاده", bpb_tokname:"یک نام برای این توکن:", bpb_toksaved:"توکن ذخیره شد",  bpb_cfg_t:"۲ · تنظیمات پنل", bpb_cfg_h:"مقادیر امن از قبل پر شده‌اند — برای مقادیر جدید Generate بزن یا خودت وارد کن. از کلمات bpb / vpn / proxy در نام پروژه استفاده نکن (ممکن است Cloudflare مسدود کند).", bpb_name:"نام پروژه", bpb_uuid:"UUID", bpb_trojan:"رمز Trojan", bpb_subpath:"مسیر اشتراک", bpb_proxyip:"Proxy IP / دامنه", bpb_fallback:"دامنهٔ Fallback", bpb_gen:"تولید مقادیر", bpb_deploy:"دیپلوی پنل", bpb_result_t:"۳ · پنل‌های شما", bpb_panel_url:"پنل", bpb_login:"رمز پنل", bpb_sub_url:"اشتراک", bpb_import:"وارد کردن کانفیگ‌ها", bpb_open:"باز کردن پنل", bpb_paneldel:"حذف", bpb_madeby:"ساخته‌شده با", bpb_note:"توکن شما روی همین دستگاه می‌ماند و فقط به Cloudflare ارسال می‌شود. پنل داخل برنامه جاسازی شده و روی ورکر شما آپلود می‌شود. اگر حساب شما ساب‌دامین workers.dev نداشته باشد، به‌صورت خودکار ثبت می‌شود. بعد از دیپلوی، پنل را باز کنید، با UUID وارد شوید و اشتراک را به کانفیگ‌ها وارد کنید.", bpb_wjs_t:"۴ · اسکریپت ورکر (پیشرفته)", bpb_wjs_h:"اختیاری. پنل داخل خود برنامه جاسازی شده و روی ورکر شما دیپلوی می‌شود. برای دیدن یا ویرایش قبل از دیپلوی اینجا بارگذاری کنید؛ برای دیپلوی نسخهٔ جاسازی‌شده بدون تغییر، خالی بگذارید.", bpb_wjs_load:"بارگذاری پنل جاسازی‌شده", bpb_wjs_clear:"پاک کردن", bpb_pwd_t:"۳ · رمز پنل", bpb_pwd_h:"رمزی که برای ورود به پنل استفاده می‌کنید. پنل بار اول که بازش می‌کنید این را از شما می‌خواهد — همین مقدار را وارد کنید. خصوصی نگه دارید.", bpb_genpwd:"تولید", bpb_mode:"دیپلوی به", bpb_mode_worker:"روی <name>.workers.dev دیپلوی می‌شود", bpb_mode_pages:"روی <name>.pages.dev دیپلوی می‌شود", bpb_need_token:"ابتدا توکن API کلودفلر را وارد کنید.", bpb_deploying:"در حال دیپلوی روی Cloudflare…", bpb_done:"پنل دیپلوی شد!", bpb_import_wait:"هنوز کانفیگی نیست — ممکن است ورکر کمی زمان لازم داشته باشد. پنل را باز کنید و دوباره Import بزنید.", nav_proxy:"تونل SNI", nav_splus:"تونل SPlus", nav_psiphon:"سایفون", nav_xray:"هستهٔ XRay", nav_massuri:"چک انبوه URI", nav_sniscan:"اسکن SNI", nav_cdnconfigs:"کانفیگ‌های CDN",
     nav_mass:"اسکن گروهی SNI", nav_cf:"اسکنر IP تمیز", nav_cdnedge:"تست اِج CDN", nav_uri:"تجزیه‌گر URI", nav_windivert:"WinDivert", nav_about:"درباره",
     c_start_proxy:"شروع پروکسی", c_stop:"توقف", c_check_port:"بررسی پورت", c_run_relay:"اجرای تست رله",
     c_start_tunnel:"شروع تونل", c_run_test:"اجرای تست", c_test:"تست", c_scan:"اسکن", c_parse:"تجزیه",
@@ -1587,9 +1648,9 @@ const I18N = {
     c_speedtest:"تست سرعت", c_share:"اشتراک / QR", c_load_sni:"بارگذاری کانفیگ‌های SNI", cfgm_sni_grp:"SNI اسپوف", c_copy_uuid:"کپی UUID",
     cfgm_edit_t:"ویرایش کانفیگ", ed_allowinsecure:"اجازهٔ ناامن (رد کردن بررسی گواهی TLS). پیش‌فرض خاموش — فقط برای سرورهای self-signed روشن کنید.", ed_name:"نام", ed_address:"آدرس (هاست / IP)", ed_port:"پورت", ed_uuid:"UUID", ed_password:"رمز عبور",
     ed_method:"رمزنگاری (method)", ed_encryption:"رمزنگاری", ed_flow:"Flow", ed_network:"شبکه (ترنسپورت)", ed_path:"مسیر / سرویس",
-    ed_hosthdr:"هدر Host", ed_security:"امنیت", ed_sni:"SNI", ed_fp:"اثرانگشت uTLS", ed_alpn:"ALPN",
+    ed_hosthdr:"هدر Host", ed_rawcfg:"کانفیگ کامل Xray (JSON)", ed_security:"امنیت", ed_sni:"SNI", ed_fp:"اثرانگشت uTLS", ed_alpn:"ALPN",
     ed_unparsed:"این لینک به فیلدها تجزیه نشد — URI خام را مستقیم ویرایش کنید.",
-    hdr_tun:"TUN", hdr_sysset:"تنظیم پروکسی", hdr_sysclear:"پاک‌کردن پروکسی", c_download_ca:"دانلود گواهی (.pem)", c_download_ca_crt:"دانلود گواهی (.crt · ویندوز)", f_autosave:"ذخیرهٔ خودکار همه‌چیز (بازیابی در اجرای بعدی)", cfg_h2:"همه‌چیز در همهٔ تب‌ها به‌طور خودکار در پوشهٔ اجرای برنامه ذخیره و در اجرای بعدی بازیابی می‌شود. می‌توانید فایل مشخصی هم ذخیره/بارگذاری کنید.",
+    hdr_tun:"TUN", hdr_sysset:"تنظیم پروکسی", hdr_sysclear:"پاک‌کردن پروکسی", c_phone_setup:"📱 راه‌اندازی موبایل (v2ray + گواهی)", c_standalone:"🌐 کانفیگ مستقل موبایل (بدون کامپیوتر)", sa_keytip:"این کانفیگ کلید خصوصی CA شما را در خود دارد تا Xray بتواند TLS را روی دستگاه دوباره امضا کند — این فایل را خصوصی نگه دارید و به کسی ندهید.", sa_pc_t:"ویندوز / کامپیوتر (v2rayN)", sa_pc1:"از نسخهٔ جدید v2rayN با هستهٔ Xray استفاده کنید (Core type حتماً روی Xray باشد).", sa_pc2:"گواهی را به‌عنوان Trusted Root نصب کنید: Settings → Privacy & security → Security → Manage certificates → Manage imported certificates from Windows → Trusted Root Certification Authorities → Import → فایل .crt → استور = Trusted Root Certification Authorities.", sa_pc3:"v2rayN → Configuration → Add a custom configuration → این .json را وارد کنید → Core type = Xray و فیلد SOCKS port را حتماً خالی بگذارید.", sa_pc4:"کانفیگ را انتخاب کنید، سپس روی آیکن tray راست‌کلیک → Set system proxy (آیکن قرمز می‌شود). از حالت TUN استفاده نکنید — TLS خام به inbound می‌رود و خطا می‌دهد.", sa_pc5:"در Chrome/Edge باز کنید (از استور ریشهٔ ویندوز استفاده می‌کنند). فقط برای سایت‌های روی CDN پشتیبانی‌شده (گوگل/Fastly/Meta) کار می‌کند و مسدودسازی مبتنی بر IP را دور نمی‌زند.", sa_intro:"این کانفیگ دامین‌فرانتینگ را کاملاً داخل Xray روی گوشی اجرا می‌کند — بدون نیاز به کامپیوتر، همه‌جا کار می‌کند. یک‌بار گواهی را نصب کنید، کانفیگ را وارد کنید و متصل شوید. (نیازمند هستهٔ Xray نسخهٔ ۲۶.۲.۶ به بالا مثل v2rayNG / v2box / Streisand.)", sa_dl_cfg:"دانلود کانفیگ مستقل", sa_ios1:"یک کلاینت v2ray/Xray با پشتیبانی از Xray 26.2.6+ نصب کنید (v2box یا Streisand).", sa_ios2:"گواهی را دانلود کنید، سپس تنظیمات → عمومی → VPN و مدیریت دستگاه → پروفایل را نصب کنید و عمومی → درباره → Certificate Trust Settings → اعتماد کامل را روشن کنید.", sa_ios3:"کانفیگ مستقل را در کلاینت وارد کنید (فایل را باز کنید یا به‌صورت custom config بچسبانید).", sa_ios4:"متصل شوید. همه‌چیز روی گوشی انجام می‌شود — این کامپیوتر می‌تواند خاموش باشد.", sa_and1:"v2rayNG نسخهٔ جدید (با Xray 26.2.6+) نصب کنید.", sa_and2:"گواهی را دانلود و نصب کنید: تنظیمات → امنیت → رمزنگاری و اعتبارنامه‌ها → نصب گواهی → گواهی CA.", sa_and3:"در v2rayNG: + → Import config from file / custom config، کانفیگ مستقل را انتخاب کنید.", sa_and4:"پروفایل را انتخاب و متصل شوید. بدون نیاز به کامپیوتر.", sa_note:"رایج‌ترین اشتباه: اجرا در حالت TUN. این روش به حالت Set-system-proxy (کامپیوتر) / proxy نیاز دارد تا مرورگر CONNECT درست بفرستد؛ TUN باعث ارسال TLS خام به inbound و خطای invalid-method می‌شود. همچنین مطمئن شوید گواهی به‌عنوان Trusted Root نصب شده، و روی اندروید غیر روت‌شده فقط در مرورگرهای کرومیوم کار می‌کند نه اپ‌های بومی.", sa_credit:"تکنیک دامین‌فرانتینگ MITM از @patterniha · کانفیگ تولیدشده توسط V2RayEz.", c_close:"بستن", ph_qr_ios:"اسکن برای نصب پروفایل iOS", ph_dl_ios:"دریافت پروفایل iOS (.mobileconfig)", ph_ios2b:"QR پروفایل iOS را در Safari اسکن کنید (یا لینک .mobileconfig را باز کنید) — وقتی پیام دانلود پروفایل پیکربندی آمد روی Allow بزنید.", ph_ios3b:"تنظیمات → عمومی → VPN و مدیریت دستگاه → پروفایل V2RayEz → Install. سپس تنظیمات → عمومی → درباره → Certificate Trust Settings → اعتماد کامل V2RayEz را روشن کنید.", sa_ios2b:"پروفایل iOS (.mobileconfig) را دانلود و باز کنید — تنظیمات → عمومی → VPN و مدیریت دستگاه → Install. سپس عمومی → درباره → Certificate Trust Settings → اعتماد کامل را روشن کنید.", ph_intro:"روی گوشی، گواهی را نصب و کانفیگ v2ray زیر را وارد کنید، سپس متصل شوید. آدرس پراکسی:", ph_warn_run:"ابتدا پراکسی دامین‌فرانتینگ را اجرا کنید (Start بالا) و دوباره این را باز کنید.", ph_warn_bind:"پراکسی روی localhost است و گوشی نمی‌تواند وصل شود. هاست آن را روی همهٔ اینترفیس‌ها بگذارید و ری‌استارت کنید — bind به", ph_alt_ips:"آدرس‌های دیگر این کامپیوتر:", ph_qr_cert:"اسکن برای دریافت گواهی", ph_qr_cfg:"اسکن برای دریافت کانفیگ v2ray", ph_dl_cert:"دانلود گواهی", ph_dl_cfg:"دانلود کانفیگ v2ray", ph_ios_t:"آیفون / آیپد", ph_ios1:"گوشی را به همان Wi-Fi این کامپیوتر وصل کنید.", ph_ios2:"QR گواهی را در Safari اسکن کنید (یا لینک دانلود را باز کنید) و اجازهٔ دانلود پروفایل را بدهید.", ph_ios3:"تنظیمات، عمومی، VPN و مدیریت دستگاه — پروفایل V2RayEz را نصب کنید.", ph_ios4:"تنظیمات، عمومی، درباره، Certificate Trust Settings — اعتماد کامل V2RayEz را روشن کنید.", ph_ios5:"یک کلاینت v2ray (Shadowrocket / v2box / Streisand) نصب کنید، کانفیگ را وارد کنید (QR را اسکن یا فایل را باز کنید) و متصل شوید.", ph_and_t:"اندروید", ph_and1:"گوشی را به همان Wi-Fi این کامپیوتر وصل کنید.", ph_and2:"QR گواهی را اسکن کنید (یا لینک را باز کنید) تا فایل .crt دانلود شود.", ph_and3:"تنظیمات، امنیت، رمزنگاری و اعتبارنامه‌ها، نصب گواهی، گواهی CA — فایل دانلودشده را انتخاب کنید.", ph_and4:"v2rayNG را نصب کنید، + را بزنید، Import config from file/QR، کانفیگ v2ray (custom config) را انتخاب کنید.", ph_and5:"پروفایل را انتخاب و روی اتصال بزنید.", ph_note:"گوشی از طریق این کامپیوتر مسیریابی می‌شود که باید روشن بماند. گواهی MITM فقط داخل شبکهٔ محلی برای فرانت مجدد HTTPS استفاده می‌شود؛ کلید خصوصی هرگز خارج نمی‌شود. SOCKS تور فقط TCP را عبور می‌دهد.", c_download_ca:"دانلود گواهی (.pem)", c_download_ca_crt:"دانلود گواهی (.crt · ویندوز)", f_autosave:"ذخیرهٔ خودکار همه‌چیز (بازیابی در اجرای بعدی)", cfg_h2:"همه‌چیز در همهٔ تب‌ها به‌طور خودکار در پوشهٔ اجرای برنامه ذخیره و در اجرای بعدی بازیابی می‌شود. می‌توانید فایل مشخصی هم ذخیره/بارگذاری کنید.",
     about_f7_t:"TUN با sing-box", about_f7_d:"sing-box را پیدا یا دانلود کنید و هر کانفیگ متصل را به‌صورت VPN سراسری TUN اجرا کنید — همهٔ ترافیک دستگاه از آن عبور می‌کند (نیاز به ادمین/روت).",
     about_f8_t:"کتابخانهٔ کانفیگ", about_f8_d:"گروه‌ها، اشتراک‌ها، لیست‌های کانفیگ SNI/اسپوف، اشتراک QR، منوی راست‌کلیک، انتخاب چندتایی با تست رله/سرعت دسته‌ای — همه به‌طور خودکار ذخیره می‌شوند.",
     about_f9_t:"تونل گوگل (Fastly)", about_f9_d:"یک رلهٔ دامین‌فرانتینگ از طریق Google Apps Script و یک Cloudflare Worker که خودتان دیپلوی می‌کنید — اسکریپت‌ها داخل برنامه ساخته می‌شوند، با گواهی قابل دانلود (.pem / .crt).",
@@ -1702,7 +1763,7 @@ const NAV_SECTIONS = [
     {id:"cdnconfigs",ic:"\u2730"},
   ]},
   {label:"sec_tools", items:[
-    {id:"cfworker",  ic:"\u2601"},
+    {id:"ezbpb",     ic:"\uD83D\uDE80", tag:"new"},
     {id:"update",    ic:"\u21BB"},
     {id:"donation",  ic:"\u2665", tag:"new"},
     {id:"about",     ic:"\u24D8"},
@@ -1736,6 +1797,7 @@ function selectTab(id){
   if(id==="windivert") wdRefresh();
   if(id==="xray"){ xrEngineUI(); xrShowActive(); api("/api/xray/status").then(r=>{ if(r&&r.running) xrUI(true,r); else api("/api/singbox/status").then(s=>xrUI(!!(s&&s.running),s)); }); }
   if(id==="psiphon"){ api("/api/psiphon/status").then(r=>psiUI(!!r.running,r)); }
+  if(id==="ezbpb"){ if($("bpb_uuid")&&!$("bpb_uuid").value) bpbGen(); if(typeof bpbRenderPanels==="function") bpbRenderPanels(); if(typeof bpbRenderTokens==="function") bpbRenderTokens(); }
   if(id==="cdnconfigs"){
     api("/api/xray/cdnconfigs/status",{}).then(s=>{
       if(!s) return;
@@ -1823,12 +1885,23 @@ $("hdrXrayStop").onclick = async ()=>{
   refreshHdrXray();
   if(typeof xrUI === "function") xrUI(false);
 };
-// TUN toggle in the bar mirrors the XRay Core engine selector.
-$("hdrTun").onchange = ()=>{
+// TUN toggle in the bar mirrors the XRay Core engine selector — and applies live.
+$("hdrTun").onchange = async ()=>{
   const tun=$("hdrTun").checked;
-  if($("xr_engine")) $("xr_engine").value = tun ? "singbox" : "xray";
+  if($("xr_engine")) $("xr_engine").value = tun ? "xray-tun" : "xray";
   if($("xr_tun")) $("xr_tun").checked = tun;
   if(typeof xrEngineUI==="function") xrEngineUI();
+  // If a connection is live, switch engines immediately instead of waiting for
+  // a manual stop/start in the XRay Core section.
+  let running=false;
+  try{
+    const rx=await api("/api/xray/status",{}); if(rx&&rx.running) running=true;
+    if(!running){ const rs=await api("/api/singbox/status",{}); if(rs&&rs.running) running=true; }
+  }catch(e){}
+  if(!running) return;
+  // tun2socks survives an xray restart, so stop it first when leaving TUN.
+  try{ await api("/api/tun2socks/stop",{}); }catch(e){}
+  if(xrActiveURI){ await xrStartEngine(); refreshHdrXray(); }
 };
 // Start from the bar: uses the connected config + current engine/TUN choice.
 $("hdrXrayStart").onclick = async ()=>{
@@ -2030,10 +2103,12 @@ function xrShowActive(){
   else { el.className="infobox"; el.textContent=t("xray_run_none"); }
 }
 function xrEngineUI(){
-  const sb=$("xr_engine").value==="singbox";
+  const eng=$("xr_engine").value;
+  const sb=eng==="singbox";
   $("xr_tunrow").style.display = sb ? "" : "none";
   $("xr_xrayopts").style.display = sb ? "none" : "";
-  $("xr_tunwarn").style.display = (sb && $("xr_tun").checked) ? "" : "none";
+  $("xr_tunwarn").style.display = (eng==="xray-tun" || (sb && $("xr_tun").checked)) ? "" : "none";
+  if($("hdrTun")) $("hdrTun").checked = (eng!=="xray");
 }
 async function xrStartEngine(){
   if(!xrActiveURI){ $("xr_out").innerHTML='<div class="result bad">'+esc(t("xray_run_none"))+'</div>'; selectTab("configs"); return; }
@@ -2058,6 +2133,16 @@ async function xrayConnect(u){
   const xb=$("x_uri"); if(xb) xb.value=xrActiveURI;
   xrShowActive();
   await xrStartEngine();
+}
+// Connect a full imported Xray config (runs it directly via xray -c).
+async function xrayConnectRaw(raw,name){
+  xrActiveURI="";
+  selectTab("xray");
+  const el=$("xr_active"); if(el){ el.className="infobox ok"; el.textContent=(name||"Imported config")+" — running its own config (xray -c)"; }
+  if($("xr_out")) $("xr_out").innerHTML='<div class="result cy">'+esc(t("c_connecting"))+'</div>';
+  const r=await api("/api/xray/startraw",{config:raw,bin_path:($("x_bin")?$("x_bin").value.trim():"")});
+  if(r&&r.error){ if($("xr_out")) $("xr_out").innerHTML='<div class="result bad">'+esc(r.error)+'</div>'; xrUI(false); return; }
+  xrUI(true,r); refreshHdrXray();
 }
 function xrUI(running,st){
   st=st||{};
@@ -2364,10 +2449,6 @@ function savedSNIRender(){
 window.savedSNIDel=function(hostEnc){ const host=decodeURIComponent(hostEnc); SAVED_SNI=SAVED_SNI.filter(x=>x.host!==host); savedSNISave(); savedSNIRender(); };
 $("saved_sni_clear").onclick=()=>{ if(!SAVED_SNI.length) return; if(!confirm(t("saved_sni_clear_c"))) return; SAVED_SNI=[]; savedSNISave(); savedSNIRender(); };
 
-/* ===================== cloudflare worker maker ===================== */
-$("cfw_gen").onclick=async()=>{ const r=await api("/api/edge/uuid",{}); if(r.uuid){ $("cfw_uuid").value=r.uuid; $("cfw_meta").innerHTML='<span class="ok">UUID ✓</span>'; } };
-$("cfw_toedge").onclick=async()=>{ if($("cfw_uuid").value.trim()){ if(await copyText($("cfw_uuid").value.trim())) $("cfw_meta").innerHTML='<span class="ok">UUID '+esc(t("cc_copied"))+'</span>'; } };
-
 /* ===================== modal helper ===================== */
 function showModal(html){ $("modalBox").innerHTML=html; $("modal").classList.add("show"); }
 function closeModal(){ $("modal").classList.remove("show"); }
@@ -2402,7 +2483,7 @@ function nameOf(uri){
   try{ const u=new URL(uri); if(u.hostname) return u.hostname+(u.port?(":"+u.port):""); }catch(e){}
   return uri.slice(0,42)+"…";
 }
-function protoOf(uri){ const i=uri.indexOf("://"); return i>0?uri.slice(0,i):"?"; }
+function protoOf(uri){ if(uri&&uri.indexOf("raw:")===0) return "xray-config"; const i=uri.indexOf("://"); return i>0?uri.slice(0,i):"?"; }
 // forceSecure strips allowInsecure from a link so configs are added with TLS
 // verification ON by default (some providers ship allowInsecure=1).
 function forceSecure(uri){
@@ -2434,6 +2515,29 @@ function cfgmAddLinks(links, _grp){
     g.configs.push({id:uid(), uri, name:nameOf(uri)}); have.add(uri); added++; });
   cfgmSave(); cfgmRender();
   return added;
+}
+// Import a full Xray config (single object or array — e.g. a BPB "Best Ping"
+// file). Extracts every proxy outbound into its own config; if a config has no
+// convertible proxy (e.g. a MITM-DomainFronting file), it's added as one raw
+// runnable entry. Returns the count added, or -1 if the text isn't JSON config.
+async function importConfigText(text){
+  const t=(text||"").trim();
+  if(!t || (t[0]!=="{" && t[0]!=="[")) return -1;
+  let data; try{ data=JSON.parse(t); }catch(e){ return -1; }
+  // Ask the server to pull out vless/trojan proxy outbounds as share links.
+  let r=null; try{ r=await api("/api/configs/fromjson",{text:t,limit:1000}); }catch(e){}
+  if(r && r.configs && r.configs.length){ return cfgmAddLinks(r.configs); }
+  // Valid JSON config(s) but nothing convertible → add as raw runnable config(s).
+  const arr=Array.isArray(data)?data:[data];
+  const g=curGroup(); let added=0;
+  arr.forEach(cfg=>{
+    if(!cfg || typeof cfg!=="object" || !Array.isArray(cfg.outbounds)) return;
+    const id=uid();
+    g.configs.push({id, uri:"raw:"+id, name:cfg.remarks||cfg.__name__||("Imported config "+(g.configs.length+1)), raw:JSON.stringify(cfg)});
+    added++;
+  });
+  if(added){ cfgmSave(); cfgmRender(); return added; }
+  return -1;
 }
 function cfgmRenderGroups(){
   $("cfgm_groups").innerHTML = CFGM.groups.map(g=>
@@ -2587,7 +2691,7 @@ async function cfgmPasteClipboard(){
 }
 async function cfgmAction(act, id){
   const c = cfgmCfg(id); if(!c) return;
-  if(act==="connect"){ CFGM.active=c.uri; cfgmSave(); cfgmRender(); xrayConnect(encodeURIComponent(c.uri)); }
+  if(act==="connect"){ CFGM.active=c.uri; cfgmSave(); cfgmRender(); if(c.raw){ xrayConnectRaw(c.raw,c.name); } else { xrayConnect(encodeURIComponent(c.uri)); } }
   else if(act==="copy"){ if(await copyText(c.uri)) {} }
   else if(act==="del"){ const g=curGroup(); g.configs=g.configs.filter(x=>x.id!==id); cfgmSel.delete(id); cfgmSave(); cfgmRender(); }
   else if(act==="qr"){ cfgmShare(id); }
@@ -2609,13 +2713,18 @@ async function cfgmPing(c, mode){
 }
 async function cfgmShare(id){
   const c=cfgmCfg(id); if(!c) return;
+  const isRaw=(c.uri||"").indexOf("raw:")===0;
   showModal('<h3>'+esc(c.name)+'</h3><div id="qrslot" class="hint">'+esc(t("c_loading"))+'</div>'+
-    '<textarea readonly>'+esc(c.uri)+'</textarea>'+
-    '<div class="row"><button class="act btn-alt" onclick="(async()=>{await copyText('+JSON.stringify(c.uri)+');})()" >'+esc(t("c_copy"))+'</button>'+
+    '<textarea readonly>'+esc(isRaw?(c.raw||""):c.uri)+'</textarea>'+
+    '<div class="row"><button class="act btn-alt" onclick="(async()=>{await copyText('+JSON.stringify(isRaw?(c.raw||""):c.uri)+');})()" >'+esc(t("c_copy"))+'</button>'+
     '<button class="act btn-ghost" onclick="closeModal()">'+esc(t("c_close"))+'</button></div>');
-  const r=await api("/api/qr",{text:c.uri});
   const slot=$("qrslot");
-  if(slot){ slot.outerHTML = r&&r.png ? '<img src="'+r.png+'" alt="QR" width="280" height="280">' : '<div class="bad">'+esc((r&&r.error)||"QR failed")+'</div>'; }
+  if(isRaw){ if(slot) slot.outerHTML='<div class="hint" style="text-align:center;padding:14px">'+esc(t("c_qr_raw"))+'</div>'; return; }
+  const r=await api("/api/qr",{text:c.uri});
+  const s2=$("qrslot");
+  if(s2){ s2.outerHTML = r&&r.png
+    ? '<div style="background:#fff;padding:14px;border-radius:12px;display:inline-block"><img src="'+r.png+'" alt="QR" width="300" height="300" style="image-rendering:pixelated;display:block"></div>'
+    : '<div class="bad">'+esc((r&&r.error)||"QR failed")+'</div>'; }
 }
 // ---- share-link parse/build for the structured editor ----
 function b64e(s){ try{ return btoa(unescape(encodeURIComponent(s))); }catch(e){ return btoa(s); } }
@@ -2687,6 +2796,32 @@ function buildLink(o){
 function fld(label,id,val,ph){ return '<label style="display:block;text-align:left;margin-bottom:9px"><span class="lbl">'+esc(label)+'</span><input id="'+id+'" value="'+esc(val||"")+'" placeholder="'+esc(ph||"")+'"></label>'; }
 function sel(label,id,val,opts){ return '<label style="display:block;text-align:left;margin-bottom:9px"><span class="lbl">'+esc(label)+'</span><select id="'+id+'">'+opts.map(o=>'<option value="'+esc(o)+'"'+(o===val?' selected':'')+'>'+esc(o||"(none)")+'</option>').join("")+'</select></label>'; }
 function cfgmEdit(id){
+  const c=cfgmCfg(id); if(!c) return;
+  if(c.raw) return cfgmEditRaw(c);
+  return cfgmEditLink(id);
+}
+// Editor for raw full-Xray-config entries (e.g. MITM-DomainFronting JSON):
+// edit the name and the JSON directly, with validation + pretty-print.
+function cfgmEditRaw(c){
+  let pretty=c.raw; try{ pretty=JSON.stringify(JSON.parse(c.raw),null,2); }catch(e){}
+  let body='<h3>'+esc(t("cfgm_edit_t"))+' · <span class="cy">xray-config</span></h3><div style="text-align:left">';
+  body+=fld(t("ed_name"),"ed_name",c.name,"display name");
+  body+='<label style="display:block;text-align:left"><span class="lbl">'+esc(t("ed_rawcfg"))+'</span>'+
+        '<textarea id="ed_rawjson" style="width:100%;min-height:300px;font-size:11px;font-family:var(--mono)">'+esc(pretty)+'</textarea></label>';
+  body+='<div id="ed_rawerr" class="bad" style="font-size:12px;min-height:16px"></div></div>';
+  body+='<div class="row"><button class="act btn-go" id="ed_save">'+esc(t("c_save"))+'</button>'+
+        '<button class="act btn-alt" id="ed_copy">'+esc(t("c_copy"))+'</button>'+
+        '<button class="act btn-ghost" onclick="closeModal()">'+esc(t("c_close"))+'</button></div>';
+  showModal(body);
+  const validate=()=>{ try{ JSON.parse($("ed_rawjson").value); $("ed_rawerr").textContent=""; return true; }catch(e){ $("ed_rawerr").textContent=String(e.message||e); return false; } };
+  $("ed_rawjson").oninput=validate;
+  $("ed_copy").onclick=async()=>{ await copyText($("ed_rawjson").value); };
+  $("ed_save").onclick=()=>{
+    if(!validate()) return;
+    c.raw=$("ed_rawjson").value; c.name=$("ed_name").value||c.name; cfgmSave(); cfgmRender(); closeModal();
+  };
+}
+function cfgmEditLink(id){
   const c=cfgmCfg(id); if(!c) return;
   const o=parseLink(c.uri);
   const isVmess=o.protocol==="vmess", isSS=o.protocol==="shadowsocks", isVT=(o.protocol==="vless"||o.protocol==="trojan");
@@ -2766,7 +2901,7 @@ $("cfgm_folder").onclick=async()=>{
 };
 $("cfgm_rengroup").onclick=()=>{ const g=curGroup(); const n=prompt(t("cfgm_group_name"), g.name); if(n){ g.name=n; cfgmSave(); cfgmRender(); } };
 $("cfgm_delgroup").onclick=()=>{ if(CFGM.groups.length<=1){ return; } if(!confirm(t("cfgm_del_confirm"))) return; CFGM.groups=CFGM.groups.filter(x=>x.id!==CFGM.cur); CFGM.cur=CFGM.groups[0].id; cfgmSel.clear(); cfgmSave(); cfgmRender(); };
-$("cfgm_addpaste").onclick=()=>{ const n=cfgmAddLinks($("cfgm_paste").value.split("\n")); $("cfgm_paste").value=""; $("cfgm_count").textContent="+"+n; setTimeout(cfgmRender,800); };
+$("cfgm_addpaste").onclick=async()=>{ const v=$("cfgm_paste").value; let n=await importConfigText(v); if(n<0) n=cfgmAddLinks(v.split("\n")); $("cfgm_paste").value=""; $("cfgm_count").textContent="+"+n; setTimeout(cfgmRender,800); };
 $("cfgm_subimport").onclick=async()=>{ const u=$("cfgm_suburl").value.trim(); if(!u) return; $("cfgm_count").textContent=t("c_loading");
   const r=await api("/api/subscribe",{url:u,limit:500}); if(r.error){ $("cfgm_count").innerHTML='<span class="bad">'+esc(r.error)+'</span>'; return; }
   const n=cfgmAddLinks(r.configs||[]); $("cfgm_count").innerHTML='<span class="ok">+'+n+' '+esc(t("c_configs_added"))+'</span>'; };
@@ -2801,10 +2936,144 @@ $("cfgm_copyall").onclick=async()=>{ const g=curGroup(); if(await copyText(g.con
   ["dragleave","drop"].forEach(ev=>dz.addEventListener(ev,e=>{e.preventDefault();dz.classList.remove("drag");}));
   dz.addEventListener("drop", async e=>{
     const f=e.dataTransfer.files[0];
-    if(f){ const txt=await f.text(); const n=cfgmAddLinks(txt.split("\n")); $("cfgm_count").textContent="+"+n; }
-    else { const txt=e.dataTransfer.getData("text"); if(txt){ const n=cfgmAddLinks(txt.split("\n")); $("cfgm_count").textContent="+"+n; } }
+    if(f){ const txt=await f.text(); let n=await importConfigText(txt); if(n<0) n=cfgmAddLinks(txt.split("\n")); $("cfgm_count").textContent="+"+n; }
+    else { const txt=e.dataTransfer.getData("text"); if(txt){ let n=await importConfigText(txt); if(n<0) n=cfgmAddLinks(txt.split("\n")); $("cfgm_count").textContent="+"+n; } }
   });
 })();
+// ===== EzBPB — deploy a BPB Worker Panel to Cloudflare =====================
+async function bpbGen(){
+  const r=await api("/api/bpb/gen",{});
+  if(!r) return;
+  if($("bpb_name")&&r.name) $("bpb_name").value=r.name;
+  if($("bpb_uuid")) $("bpb_uuid").value=r.uuid||"";
+  if($("bpb_trojan")) $("bpb_trojan").value=r.trojan||"";
+  if($("bpb_subpath")) $("bpb_subpath").value=r.sub_path||"";
+  if($("bpb_panelpwd")) $("bpb_panelpwd").value=(r.trojan||"").slice(0,10)+"-"+(r.sub_path||"").slice(0,4);
+}
+if($("bpb_gen")) $("bpb_gen").onclick=bpbGen;
+// ---- saved Cloudflare API tokens ----
+function bpbTokens(){ try{ return JSON.parse(localStorage.getItem("ezbpb_tokens")||"[]"); }catch(e){ return []; } }
+function bpbSaveTokens(a){ try{ localStorage.setItem("ezbpb_tokens", JSON.stringify(a)); }catch(e){} }
+function bpbRenderTokens(sel){
+  const a=bpbTokens(), row=$("bpb_tokrow"), list=$("bpb_toklist");
+  if(!row||!list) return;
+  if(!a.length){ row.style.display="none"; return; }
+  row.style.display="";
+  list.innerHTML=a.map((tk,i)=>'<option value="'+i+'">'+esc(tk.name)+'</option>').join("");
+  if(sel!=null) list.value=sel;
+}
+let BPB_ACCT_NAME="";
+function bpbAcctEmail(){ const m=(BPB_ACCT_NAME||"").match(/[^\s'"]+@[^\s'"]+/); return m?m[0]:BPB_ACCT_NAME; }
+if($("bpb_toksave")) $("bpb_toksave").onclick=()=>{
+  const tok=$("bpb_token").value.trim(); if(!tok){ $("bpb_tokmeta").innerHTML='<span class="bad">'+esc(t("bpb_need_token"))+'</span>'; return; }
+  const def=bpbAcctEmail()||("Token "+(bpbTokens().length+1));
+  const name=(prompt(t("bpb_tokname"),def)||"").trim(); if(!name) return;
+  const a=bpbTokens(); const i=a.findIndex(x=>x.token===tok);
+  if(i>=0) a[i].name=name; else a.unshift({name,token:tok});
+  bpbSaveTokens(a); bpbRenderTokens(0);
+  $("bpb_tokmeta").innerHTML='<span class="ok">✓ '+esc(t("bpb_toksaved"))+'</span>';
+};
+if($("bpb_tokuse")) $("bpb_tokuse").onclick=()=>{
+  const a=bpbTokens(), i=parseInt($("bpb_toklist").value,10); if(isNaN(i)||!a[i]) return;
+  $("bpb_token").value=a[i].token;
+  if($("bpb_verify")) $("bpb_verify").click();
+};
+if($("bpb_tokdel")) $("bpb_tokdel").onclick=()=>{
+  const a=bpbTokens(), i=parseInt($("bpb_toklist").value,10); if(isNaN(i)) return;
+  a.splice(i,1); bpbSaveTokens(a); bpbRenderTokens();
+};
+if($("bpb_genpwd")) $("bpb_genpwd").onclick=async()=>{ const r=await api("/api/bpb/gen",{}); if(r&&$("bpb_panelpwd")) $("bpb_panelpwd").value=(r.trojan||"")+"!"+(r.sub_path||"").slice(0,4); };
+let BPB_MODE="worker";
+if($("bpb_modeseg")) $("bpb_modeseg").querySelectorAll(".segbtn").forEach(b=>{
+  b.onclick=()=>{
+    BPB_MODE=b.dataset.mode;
+    $("bpb_modeseg").querySelectorAll(".segbtn").forEach(x=>x.classList.toggle("active",x===b));
+    if($("bpb_modehint")) $("bpb_modehint").textContent=t(BPB_MODE==="pages"?"bpb_mode_pages":"bpb_mode_worker");
+  };
+});
+if($("bpb_verify")) $("bpb_verify").onclick=async()=>{
+  const tok=$("bpb_token").value.trim(); if(!tok){ return; }
+  $("bpb_tokmeta").innerHTML='<span class="cy">'+esc(t("c_loading"))+'</span>';
+  const r=await api("/api/bpb/verify",{token:tok});
+  if(!r||!r.ok){ $("bpb_tokmeta").innerHTML='<span class="bad">'+esc((r&&r.error)||"failed")+'</span>'; $("bpb_acctrow").style.display="none"; return; }
+  const sel=$("bpb_account"); sel.innerHTML=(r.accounts||[]).map(a=>'<option value="'+esc(a.id)+'">'+esc(a.name)+'</option>').join("");
+  $("bpb_acctrow").style.display=(r.accounts&&r.accounts.length>1)?"":"none";
+  BPB_ACCT_NAME=(r.accounts&&r.accounts.length)?r.accounts[0].name:"";
+  $("bpb_tokmeta").innerHTML='<span class="ok">✓ '+esc(BPB_ACCT_NAME||"verified")+'</span>';
+};
+if($("bpb_deploy")) $("bpb_deploy").onclick=async()=>{
+  const tok=$("bpb_token").value.trim();
+  if(!tok){ $("bpb_out").innerHTML='<div class="result bad">'+esc(t("bpb_need_token"))+'</div>'; return; }
+  $("bpb_out").innerHTML='<div class="result cy">'+esc(t("bpb_deploying"))+'</div>';
+  $("bpb_deploy").disabled=true;
+  const r=await api("/api/bpb/deploy",{
+    token:tok, account_id:($("bpb_account").value||""), name:$("bpb_name").value.trim(),
+    uuid:$("bpb_uuid").value.trim(), trojan_password:$("bpb_trojan").value.trim(),
+    proxy_ip:$("bpb_proxyip").value.trim(), fallback:$("bpb_fallback").value.trim(), sub_path:$("bpb_subpath").value.trim(),
+    panel_password:($("bpb_panelpwd")?$("bpb_panelpwd").value.trim():""),
+    mode:BPB_MODE
+  });
+  $("bpb_deploy").disabled=false;
+  if(!r||!r.ok){ $("bpb_out").innerHTML='<div class="result bad">'+esc((r&&r.error)||"failed")+'</div>'; return; }
+  $("bpb_out").innerHTML='<div class="result ok">✓ '+esc(t("bpb_done"))+'</div>';
+  const x=r.result; x.mode=BPB_MODE; x.created=Date.now(); x.account=bpbAcctEmail()||BPB_ACCT_NAME||"";
+  bpbAddPanel(x);
+};
+// ---- saved panels (Your Panels) ----
+function bpbPanels(){ try{ return JSON.parse(localStorage.getItem("ezbpb_panels")||"[]"); }catch(e){ return []; } }
+function bpbSavePanels(a){ try{ localStorage.setItem("ezbpb_panels", JSON.stringify(a)); }catch(e){} }
+function bpbAddPanel(x){
+  const a=bpbPanels(); const i=a.findIndex(p=>p.panel_url===x.panel_url);
+  if(i>=0) a[i]=x; else a.unshift(x);
+  bpbSavePanels(a); bpbRenderPanels();
+}
+function bpbModeBadge(m){ const pages=(m==="pages"); return '<span class="pbadge '+(pages?'pages':'worker')+'">'+(pages?'Pages':'Worker')+'</span>'; }
+function bpbAgo(ts){ if(!ts) return ""; const s=Math.floor((Date.now()-ts)/1000);
+  if(s<60) return "just now";
+  const m=Math.floor(s/60); if(m<60) return m+"m ago";
+  const h=Math.floor(m/60); if(h<24) return h+"h ago";
+  const d=Math.floor(h/24); if(d<30) return d+"d ago";
+  return new Date(ts).toLocaleDateString();
+}
+function bpbRenderPanels(){
+  const a=bpbPanels(), card=$("bpb_resultcard"), wrap=$("bpb_panels_list");
+  if(!card||!wrap) return;
+  if(!a.length){ card.style.display="none"; return; }
+  card.style.display="";
+  wrap.innerHTML=a.map((p,i)=>
+    '<div class="panel-item '+((p.mode==="pages")?"is-pages":"is-worker")+'">'+
+      '<div class="pi-head"><span class="pi-name">'+esc(p.name)+'</span> '+bpbModeBadge(p.mode)+
+        '<span class="pi-date">'+esc(bpbAgo(p.created))+'</span>'+
+        '<button class="pi-x" title="'+esc(t("bpb_paneldel"))+'" data-del="'+i+'">✕</button></div>'+
+      (p.account?'<div class="pi-row"><span class="pi-k" data-i18n="bpb_madeby">Made by</span><span class="pi-acct">'+esc(p.account)+'</span></div>':'')+
+      '<div class="pi-row"><span class="pi-k" data-i18n="bpb_panel_url">Panel</span>'+
+        '<a href="'+esc(p.panel_url)+'" target="_blank">'+esc(p.panel_url)+'</a></div>'+
+      '<div class="pi-row"><span class="pi-k" data-i18n="bpb_login">Panel password</span>'+
+        '<code class="pi-copy" data-copy="'+esc(p.panel_password||p.uuid||"")+'">'+esc(p.panel_password||p.uuid||"")+'</code></div>'+
+      '<div class="pi-row"><span class="pi-k" data-i18n="bpb_sub_url">Subscription</span>'+
+        '<code class="pi-copy pi-sub" data-copy="'+esc(p.sub_url||"")+'">'+esc(p.sub_url||"")+'</code></div>'+
+      '<div class="pi-actions">'+
+        '<button class="act btn-go" data-import="'+i+'">'+esc(t("bpb_import"))+'</button>'+
+        '<button class="act btn-alt" data-open="'+i+'">'+esc(t("bpb_open"))+'</button>'+
+        '<button class="act btn-ghost" data-copyurl="'+i+'">'+esc(t("c_copy"))+' URL</button>'+
+        '<button class="act btn-ghost" data-copysub="'+i+'">'+esc(t("c_copy"))+' sub</button>'+
+      '</div>'+
+    '</div>').join("");
+  applyLang();
+  const copied=(el)=>{ const o=el.textContent; el.classList.add("ok2"); el.textContent="✓ "+(t("cc_copied")||"copied"); setTimeout(()=>{el.classList.remove("ok2");el.textContent=o;},900); };
+  wrap.querySelectorAll("[data-del]").forEach(b=>b.onclick=()=>{ const a2=bpbPanels(); a2.splice(+b.dataset.del,1); bpbSavePanels(a2); bpbRenderPanels(); });
+  wrap.querySelectorAll("[data-open]").forEach(b=>b.onclick=()=>window.open(bpbPanels()[+b.dataset.open].panel_url,"_blank"));
+  wrap.querySelectorAll("[data-copyurl]").forEach(b=>b.onclick=()=>{ copyText(bpbPanels()[+b.dataset.copyurl].panel_url); copied(b); });
+  wrap.querySelectorAll("[data-copysub]").forEach(b=>b.onclick=()=>{ copyText(bpbPanels()[+b.dataset.copysub].sub_url); copied(b); });
+  wrap.querySelectorAll(".pi-copy").forEach(c=>c.onclick=()=>{ copyText(c.dataset.copy); copied(c); });
+  wrap.querySelectorAll("[data-import]").forEach(b=>b.onclick=async()=>{
+    const p=bpbPanels()[+b.dataset.import]; b.disabled=true; const old=b.textContent; b.textContent="…";
+    const sub=await api("/api/subscribe",{url:p.sub_url,limit:1000});
+    b.disabled=false; b.textContent=old;
+    if(sub&&sub.configs&&sub.configs.length){ const n=cfgmAddLinks(sub.configs); selectTab("configs"); $("cfgm_count").innerHTML='<span class="ok">+'+n+' '+esc(t("c_configs_added"))+'</span>'; }
+    else { alert(t("bpb_import_wait")); }
+  });
+}
 // Enter-to-connect the selected config.
 document.addEventListener("keydown",e=>{
   const cfgPanel=document.querySelector('.panel[data-panel="configs"]');
@@ -3107,6 +3376,72 @@ $("mdf_start").onclick=async()=>{
 $("mdf_stop").onclick=async()=>{ await api("/api/mitmdf/stop",{}); mdfUI(false); };
 $("mdf_ca").onclick=()=>{ window.open("/api/mitmdf/ca","_blank"); $("mdf_cameta").innerHTML='<span class="ok">'+esc(t("gt_ca_hint"))+'</span>'; };
 $("mdf_ca_crt").onclick=()=>{ window.open("/api/mitmdf/ca?fmt=crt","_blank"); $("mdf_cameta").innerHTML='<span class="ok">'+esc(t("gt_ca_hint"))+'</span>'; };
+$("mdf_phone").onclick=async()=>{
+  const r=await api("/api/mitmdf/phone",{});
+  if(!r||!r.ok){ $("mdf_cameta").innerHTML='<span class="bad">failed</span>'; return; }
+  const appPort=location.port||"8765";
+  const ip=r.primary_ip||"";
+  const base=ip?("http://"+ip+":"+appPort):"";
+  const caURL=base+"/api/mitmdf/ca?fmt=crt";
+  const cfgURL=base+"/api/mitmdf/phoneconfig?ip="+encodeURIComponent(ip);
+  const listenAll=(r.addr||"").indexOf("0.0.0.0")===0||(r.addr||"").indexOf("[::]")===0;
+  const warn = !r.running
+    ? '<div class="warnbox" style="margin:0 0 12px">'+esc(t("ph_warn_run"))+'</div>'
+    : (!listenAll ? '<div class="warnbox" style="margin:0 0 12px">'+esc(t("ph_warn_bind"))+' <code>0.0.0.0</code></div>' : '');
+  const altIPs=(r.lan_ips||[]).length>1 ? '<p class="hint">'+esc(t("ph_alt_ips"))+' '+(r.lan_ips.join(", "))+'</p>' : '';
+  showModal(
+    '<div style="text-align:left;max-width:640px">'+
+    '<h2 style="margin:0 0 6px">📱 '+esc(t("c_phone_setup"))+'</h2>'+
+    warn+
+    '<p class="hint" style="margin:0 0 10px">'+esc(t("ph_intro"))+' <b>'+esc(ip||"—")+' : '+r.port+'</b></p>'+
+    altIPs+
+    '<div class="row" style="gap:18px;flex-wrap:wrap;justify-content:center;margin:8px 0 14px">'+
+      (ip?('<div style="text-align:center"><div class="hint">'+esc(t("ph_qr_cert"))+'</div><img id="ph_qr_ca" class="don-qr" style="width:150px;height:150px"></div>'+
+           '<div style="text-align:center"><div class="hint">'+esc(t("ph_qr_ios"))+'</div><img id="ph_qr_mc" class="don-qr" style="width:150px;height:150px"></div>'+
+           '<div style="text-align:center"><div class="hint">'+esc(t("ph_qr_cfg"))+'</div><img id="ph_qr_cfg" class="don-qr" style="width:150px;height:150px"></div>'):'')+
+    '</div>'+
+    '<div class="row" style="gap:6px;margin-bottom:10px">'+
+      '<button class="act btn-alt" id="ph_dl_ca">'+esc(t("ph_dl_cert"))+'</button>'+
+      '<button class="act btn-alt" id="ph_dl_mc">'+esc(t("ph_dl_ios"))+'</button>'+
+      '<button class="act btn-alt" id="ph_dl_cfg">'+esc(t("ph_dl_cfg"))+'</button>'+
+      '<button class="act btn-ghost" id="ph_copy_cfg">'+esc(t("c_copy"))+' v2ray</button>'+
+    '</div>'+
+    '<textarea id="ph_cfg" readonly style="width:100%;min-height:150px;font-size:11px;font-family:var(--mono)">'+esc(r.config)+'</textarea>'+
+    '<h3 style="margin:16px 0 4px">🍎 '+esc(t("ph_ios_t"))+'</h3>'+
+    '<ol class="steps" style="font-size:13px">'+
+      '<li>'+esc(t("ph_ios1"))+'</li>'+
+      '<li>'+esc(t("ph_ios2b"))+'</li>'+
+      '<li>'+esc(t("ph_ios3b"))+'</li>'+
+      '<li>'+esc(t("ph_ios4"))+'</li>'+
+      '<li>'+esc(t("ph_ios5"))+'</li>'+
+    '</ol>'+
+    '<h3 style="margin:14px 0 4px">🤖 '+esc(t("ph_and_t"))+'</h3>'+
+    '<ol class="steps" style="font-size:13px">'+
+      '<li>'+esc(t("ph_and1"))+'</li>'+
+      '<li>'+esc(t("ph_and2"))+'</li>'+
+      '<li>'+esc(t("ph_and3"))+'</li>'+
+      '<li>'+esc(t("ph_and4"))+'</li>'+
+      '<li>'+esc(t("ph_and5"))+'</li>'+
+    '</ol>'+
+    '<div class="warnbox" style="margin-top:12px">'+esc(t("ph_note"))+'</div>'+
+    '<div class="row" style="justify-content:center;margin-top:12px"><button class="act btn-ghost" onclick="closeModal()" data-i18n="c_close">Close</button></div>'+
+    '</div>'
+  );
+  // QR codes (the phone scans these URLs on the same Wi-Fi)
+  if(ip){
+    api("/api/qr",{text:caURL}).then(q=>{ if(q&&q.png&&$("ph_qr_ca")) $("ph_qr_ca").src=q.png; });
+    api("/api/qr",{text:base+"/api/mitmdf/mobileconfig"}).then(q=>{ if(q&&q.png&&$("ph_qr_mc")) $("ph_qr_mc").src=q.png; });
+    api("/api/qr",{text:cfgURL}).then(q=>{ if(q&&q.png&&$("ph_qr_cfg")) $("ph_qr_cfg").src=q.png; });
+    $("ph_dl_ca").onclick=()=>window.open(caURL,"_blank");
+    $("ph_dl_mc").onclick=()=>window.open(base+"/api/mitmdf/mobileconfig","_blank");
+    $("ph_dl_cfg").onclick=()=>window.open(cfgURL,"_blank");
+  } else {
+    $("ph_dl_ca").onclick=()=>window.open("/api/mitmdf/ca?fmt=crt","_blank");
+    $("ph_dl_mc").onclick=()=>window.open("/api/mitmdf/mobileconfig","_blank");
+    $("ph_dl_cfg").onclick=()=>window.open("/api/mitmdf/phoneconfig","_blank");
+  }
+  $("ph_copy_cfg").onclick=()=>copyText(r.config);
+};
 $("mdf_port").addEventListener("input",()=>{ const pl=$("mdf_portlbl"); if(pl) pl.textContent=$("mdf_port").value; });
 let mdfPoll=null;
 function mdfStartPoll(){ if(mdfPoll) return; mdfPoll=setInterval(async()=>{ const s=await api("/api/mitmdf/status",{}); if(s){ if(!s.running){ clearInterval(mdfPoll); mdfPoll=null; mdfUI(false); } else mdfUI(true,s); } },2500); }
