@@ -1,0 +1,27 @@
+name: Release
+
+on:
+  release:
+    types: [published]
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-go@v5
+        with:
+          go-version: 'stable'
+
+      - run: |
+          chmod +x build-all.sh
+          ./build-all.sh
+
+      - uses: softprops/action-gh-release@v2
+        with:
+          files: dist/*
